@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header id="header">
+    <header id="header" style="z-index: 999999!important;">
       <!-- pc端的菜单栏 -->
       <nav class="navbar">
         <div class="navbar-container">
@@ -9,7 +9,7 @@
           </div>
           <ul class="navbar-menu">
             <li><router-link to="/blog" class="navbar-item"> 首页</router-link></li>
-            <li><router-link to="/writeArticle" class="navbar-item">文章</router-link></li>
+            <li><router-link to="/writeArticle" class="navbar-item">写文章</router-link></li>
             <li><router-link to="/about" class="navbar-item">关于</router-link></li>
             <li><router-link to="/contact" class="navbar-item">联系我们</router-link></li>
             <label class="switch">
@@ -378,9 +378,6 @@ input:checked+.slider:before {
     background-color: #555;
   }
 
-  .el-drawer.ltr {
-    /* background-color: beige; */
-  }
   .el-icon-arrow-left{
   display: block;
 }

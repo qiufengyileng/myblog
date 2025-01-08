@@ -14,7 +14,7 @@ export default {
 
 <style scoped>
 .footer {
-  width: calc(100vw - 17px);
+  width: 100vw;
   padding: 2rem 0;
   background-color: #f1f1f180;
 }

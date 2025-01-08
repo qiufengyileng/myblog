@@ -2,13 +2,13 @@
 /*eslint-disable no-trailing-spaces*/
 <template>
   <div class="blog-page" :class="{ 'dark-mode': isNight }">
-    <HeaderComponent />
+    <HeaderComponent></HeaderComponent>
 
     <main class="main-content">
       <div class="hero">
         <p class="hero-title">Blog Title</p>
       </div>
-      <div class="body" style="display: flex;padding:0 5vw;">
+      <div class="blog-body">
         <div class="container" style="flex:2">
           <div class="content-wrapper">
             <div class="articles-section">
@@ -22,7 +22,12 @@
                   <h3 class="article-title"> {{ item.title }}
                     <span style="margin-left:1rem;">
                       <span style="font-size: medium;">类型:</span>
-                      <span style="font-size: small;" v-for="(tag, index) in (' ' + item.tags).split(',')"
+                      <span style="font-size: small;" v-for="(tag, index) in (item.tags).split(',').map((item,index)=>{
+                        if(index>=1){
+                          return ' '+item
+                        }
+                        return item
+                      })"
                         :key="(index)">{{ tag }}</span>
                     </span>
                   </h3>
@@ -195,6 +200,7 @@ h2 {
 }
 
 .hero::before {
+  pointer-events: none;
   content: '';
   position: absolute;
   top: 0;
@@ -228,7 +234,11 @@ h2 {
   height: 100%;
   width: 100%;
 }
-
+.blog-body{
+  display: flex;
+  padding:0 5vw;
+  justify-content: center;
+}
 .content-wrapper {
   display: flex;
   flex-direction: column;

@@ -7,6 +7,7 @@ import guiDang from './guiDang'
 import search from './search'
 import home from './home'
 import login from './login'
+import write from './write'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -25,6 +26,7 @@ export default new Vuex.Store({
     article,
     guiDang,
     search,
-    login
+    login,
+    write
   }
 })

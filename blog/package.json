@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --dest my_web",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -12,13 +12,16 @@
     "@wangeditor/editor-for-vue": "^1.0.2",
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.13",
     "element-ui": "^2.15.14",
     "eslint-plugin-vue": "^7.0.0",
+    "highlight.js": "^11.11.1",
     "nprogress": "^0.2.0",
     "prettier": "^3.3.3",
     "sass": "^1.83.0",
     "sass-loader": "^16.0.4",
     "scss": "^0.2.4",
+    "scss-loader": "^0.0.1",
     "vue": "^2.5.0",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2"

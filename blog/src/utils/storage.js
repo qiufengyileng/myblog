@@ -22,6 +22,11 @@ export const setUserData = (dataObject) => {
 export const getUserData = () => {
   return JSON.parse(localStorage.getItem(key + '_userData'))
 }
+export const updateUserPassword = (password) => {
+  const userData = getUserData()
+  userData.password = password
+  setUserData(userData)
+}
 export const delUserData = () => {
   return localStorage.removeItem(key + '_userData')
 }

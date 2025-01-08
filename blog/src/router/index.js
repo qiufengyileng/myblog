@@ -32,7 +32,7 @@ const searchPage = () => import('@/views/search/searchPage.vue')
 Vue.use(VueRouter)
 let messageHandle = null
 const routes = [
-  { path: '/', redirect: '/writeArticle' },
+  { path: '/', redirect: '/blog' },
   { path: '/blog', component: blog },
   { path: '/article', component: articlePage },
   { path: '/writeArticle', component: writeArticle },

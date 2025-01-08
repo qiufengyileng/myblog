@@ -3,17 +3,20 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import articleRouter from './routes/article/index.js'
 import userRouter from './routes/user/index.js'
+import  writeRouter from './routes/write/index.js'
 import { handleDataFromDB } from './connectMsql.js'
+
 
 const app = express()
 
 // 中间件
-app.use(bodyParser.json())
+app.use(bodyParser.json({limit: '100000mb'}))
 app.use(cors())
 
 // 路由
 app.use('/article', articleRouter)
 app.use('/user', userRouter)
+app.use('/write', writeRouter)
 
 // 搜索接口
 app.get('/search', (req, res) => {

@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store'
 import { Message } from 'element-ui'
 const instance = axios.create({
+  // baseURL: 'http://124.220.12.190:3000/',
   baseURL: 'http://127.0.0.1:3000/',
   timeout: 5000
 })

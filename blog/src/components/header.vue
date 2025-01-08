@@ -9,6 +9,8 @@
               class="el-icon-s-order icon"></i>归档</router-link></li>
         <li><router-link to="/more" :class="['nav-link', { 'nightMode': nightMode }]"><i
               class="el-icon-s-fold icon"></i>更多</router-link></li>
+        <li><router-link to="/writeArticle" :class="['nav-link', { 'nightMode': nightMode }]"><i
+              class="el-icon-edit icon"></i>写作</router-link></li>
         <li><router-link to="/about" :class="['nav-link', { 'nightMode': nightMode }]"><i
               class="el-icon-s-promotion icon"></i>关于</router-link></li>
         <li><router-link to="/personalCenter" :class="['nav-link', { 'nightMode': nightMode }]"><i
@@ -90,7 +92,7 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
-  width: calc(100vw - 17px);
+  width: 100vw;
   background-color: white;
   height: 10vh;
   display: flex;
@@ -98,7 +100,7 @@ export default {
 }
 
 .nav-container {
-  width: 100%;
+  width: 100vw;
   margin: 0 auto;
   display: flex;
   color: inherit;
@@ -123,11 +125,11 @@ export default {
   margin-left: 2vw;
   text-decoration: none;
   color: #333;
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 
 .nav-link:hover {
-  scale: 1.05;
+  margin-top: -0.6px;
 }
 
 .nav-link i {

@@ -5,7 +5,8 @@ export default {
   state: {
     fullArticle: null,
     articleList: [],
-    errorStatus: false
+    errorStatus: false,
+    choose: null
   },
   mutations: {
     setArticleList (state, articleList) {
@@ -14,7 +15,11 @@ export default {
     },
     setFullArticle (state, article) {
       state.fullArticle = article
-      // console.log('mutations设置全文文章', article)
+      console.log('mutations设置全文文章', article)
+    },
+    setChoose (state, choose) {
+      console.log('mutations设置choose', choose)
+      state.choose = choose
     }
   },
   actions: {
@@ -23,14 +28,15 @@ export default {
       commit('setArticleList', articleList)
     },
     async fetchArticleById ({ commit }, id) {
-      // console.log('in fetchArticleById', 'actions获取文章', id)
+      console.log('in fetchArticleById', 'actions获取文章', id)
       const [article] = await getFullArticleById(id)
       if (!article) {
         router.replace('/404')
         return
       }
-      article.paragraphs = JSON.parse(article.paragraphs)
-      // console.log('actions获取文章', article)
+      article.paragraphs.replace(/\\'/g, "'").replace(/\\"/g, '"')
+      article.title.replace(/\\'/g, "'").replace(/\\"/g, '"')
+      console.log('actions获取文章')
       commit('setFullArticle', article)
     }
   },
@@ -39,7 +45,7 @@ export default {
       return state.articleList
     },
     getFullArticle: (state) => {
-      // console.log('getters获取文章', state.fullArticle)
+      console.log('getters获取文章', state.fullArticle)
       return state.fullArticle
     }
   }

@@ -1,4 +1,8 @@
-import { getToken, getName, setUserData, getUserData, getHistory, setHistory, delHistory, delUserData, delToken } from '@/utils/storage'
+import {
+  updateUserPassword, getToken,
+  getName, setUserData, getUserData, getHistory, setHistory, delHistory,
+  delUserData, delToken
+} from '@/utils/storage'
 import { checkIdentity, getPersonalCenterData, changePersonData } from '@/api/identity'
 import { Message } from 'element-ui'
 export default {
@@ -59,6 +63,16 @@ export default {
       Message.success('退出登录成功')
       // 刷新页面
       location.reload()
+    },
+    setUserAvatar (state, avatar) {
+      state.userData.avatar = avatar
+      setUserData(state.userData)
+      console.log('setUserAvatar', state.userData)
+    },
+    setUserPassword (state, password) {
+      state.userData.password = password
+      updateUserPassword(password)
+      console.log('setUserPassword', state.userData)
     }
   },
   actions: {

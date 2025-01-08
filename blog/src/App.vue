@@ -1,4 +1,5 @@
 <template>
+      
   <div id="app">
     <link rel="stylesheet">
     <keep-alive>
@@ -41,7 +42,8 @@ function render (night) {
   console.log('style', style)
   if (night) {
     style.innerHTML = ` html{
-  color: white!important;
+  --root-color: white!important;
+  color: var(--root-color);
 } 
    body{
       background-color: #000000ed;
@@ -52,21 +54,29 @@ function render (night) {
   }// 夜间背景颜色
   style.innerHTML = `
   html{
-  color: #000!important;
+  --root-color: #000!important;
+  color: var(--root-color);
 }
     body{
       background-color: white;
     }`
 }// 渲染背景颜色
+
 </script>
 <style>
 html{
   overflow: scroll;
+  position: relative;
   overflow-x: hidden;
 }
 body{
   width: 100vw;
 }
+.text-inverted {
+            color: inherit; /* 设置文本颜色 */
+            background-color:inherit; /* 设置背景颜色 */
+            mix-blend-mode: difference; /* 使用混合模式来反转颜色 */
+        }
 h2{
   color: inherit !important;
 }

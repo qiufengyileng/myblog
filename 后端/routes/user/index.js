@@ -1,6 +1,10 @@
 import express from 'express'
 import { handleDataFromDB } from '../../connectMsql.js'
 import Token from '../../createToken.js'
+import multer from 'multer'
+
+const upload = multer({ storage: multer.memoryStorage() })
+
 
 const router = express.Router()
 const defaultData = {}
@@ -24,7 +28,7 @@ function tokenIdentity(req, res, next) {
   }).catch(() => { console.log('token验证失败+null'); next() })
 }
 
-// 中间件：获取用户ID
+// 中间件：通过token来获取用户ID
 function getUserId(req, res, next) {
   defaultData.userId = null
   const token = req.headers.authorization
@@ -47,12 +51,12 @@ router.post('/identity', tokenIdentity, (req, res) => {
       const token = Token(username)
       console.log(username, password)
       console.log('token生成' + token)
-      
+
       const sql = `UPDATE login_user 
         SET token='${token}', 
         time_before='${+new Date()}' 
         WHERE user_name='${username}' and password='${password}'`
-      
+
       handleDataFromDB(sql, 'update')
         .then(() => {
           console.log('token更新成功' + token + '\\时间：' + '' + new Date())
@@ -99,4 +103,56 @@ router.post('/personal', getUserId, (req, res) => {
   })
 })
 
+// POST /user/upload - 上传头像
+router.post('/uploadAvatar', getUserId, upload.single('avatar'), (req, res) => {
+
+  if (!req.file) {
+    return res.status(400).send({ 
+      success: false, 
+      message: '没有收到文件' 
+    })
+  }
+  const { userId } = defaultData
+
+  // 将文件转换为 Base64 字符串
+  const fileData = req.file.buffer.toString('base64')
+  const avatarBase64 = `data:${req.file.mimetype};base64,${fileData}`
+  console.log('avatarBase64', avatarBase64)
+  const sql = `update user_personal_center set avatar ='${avatarBase64}' where user_id='${userId}'`
+  handleDataFromDB(sql, 'update').then(() => {
+    console.log('uploadImg', 'success')
+    res.send({
+      success: true,
+      avatarUrl: avatarBase64
+    })
+  }).catch((error) => {
+    console.log('uploadImg', error)
+    res.send({ message: 'error' })
+  })
+})
+
+// POST /user/updataPassword - 修改密码
+router.post('/updataPassword', getUserId, (req, res) => {
+  const { userId } = defaultData
+  const { oldPassword, newPassword } = req.body
+  const sql = `select password from login_user where user_id='${userId}'`
+  handleDataFromDB(sql, 'select').then((data) => {
+    if (JSON.parse(data)[0].password === oldPassword) {
+      const sql = `update login_user set password='${newPassword}' where user_id='${userId}'`
+      handleDataFromDB(sql, 'update').then(() => {
+        console.log('updataPassword', 'success')
+        res.send({ message: 'success' })
+      }).catch((error) => {
+        console.log('updataPassword', error)
+        res.send({ message: 'error' })
+      })
+    } else {
+      console.log('updataPassword', '旧密码错误')
+      res.send({ message: '旧密码错误' })
+    }
+  }).catch((error) => {
+    console.log('updataPassword', error)
+    res.send({ message: '服务器内部故障' })
+  })
+})
 export default router 

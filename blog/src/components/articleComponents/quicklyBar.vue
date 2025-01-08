@@ -2,9 +2,10 @@
   <nav class="quick-nav">
     <h3 class="quick-nav-title">快速导航</h3>
     <ul class="quick-nav-list">
-      <li class="quick-nav-item" @click="scrollToTop" style="cursor: pointer;">返回顶部</li>
+      <li class="quick-nav-item" @click="scrollToTop" style="cursor: pointer; ">返回顶部</li>
       <li v-for="(section, index) in sections" :key="index" class="quick-nav-item">
-        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" style="cursor: pointer;
+        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose === `${index+1}`}"
+         style="cursor: pointer;
         text-decoration: none;
         color: inherit;
         ">{{ section }}</a>
@@ -22,6 +23,16 @@ export default {
       title: ''
     }
   },
+  computed: {
+    choose: {
+      get () {
+        return this.$store.state.article.choose
+      },
+      set (value) {
+        this.$store.commit('article/setChoose', value)
+      }
+    }
+  },
   mounted () {
     // window.onload = this.getSections
     this.$nextTick(() => {
@@ -34,15 +45,19 @@ export default {
   methods: {
     getSections () {
       const headings = document.querySelector('article').querySelectorAll('h2')
-      console.log('heading', headings)
+      console.log('heading', headings) 
       return Array.from(headings).map(h => h.textContent)
     },
     scrollToTop () {
+      this.choose = null
       window.scrollTo({ top: 0, behavior: 'smooth' })
     },
     scrollToSection (sectionId) {
+      // 设置choose
+      this.choose = sectionId
       // console.log(this.sections)
-      const element = document.getElementById(sectionId)
+      const element = document.querySelector(`h2[data-id="${sectionId}"]`)
+      console.log('element', element)
       const height = document.body.scrollHeight
       console.log('height', height)
       console.log('off', element.offsetTop)
@@ -77,7 +92,9 @@ export default {
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 }
-
+.choose-style{
+  color: #5fa0e2!important;
+}
 .quick-nav-title {
   font-size: 1.2rem;
   margin-bottom: 10px;

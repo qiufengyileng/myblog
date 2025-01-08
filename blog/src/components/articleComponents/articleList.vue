@@ -11,7 +11,12 @@
           <span style="font-size: medium;">类型:</span>
           <span
             style="font-size: small;"
-            v-for="(tag,index) in (' '+item.tags).split(',')"
+            v-for="(tag,index) in (item.tags).split(',').map((item,index)=>{
+                        if(index>=1){
+                          return ' '+item
+                        }
+                        return item
+                      })"
             :key="index"
           >{{ tag }}</span>
         </span>
