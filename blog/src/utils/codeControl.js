@@ -36,7 +36,19 @@ export default function addCodeControl (element) {
     try {
       // 获取代码块里面的内容
       const code = element.querySelector('code')?.textContent || ''
-      await navigator.clipboard.writeText(code)
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(code)
+      } else {
+        const code = element.querySelector('code')?.textContent || ''
+        // 创建一个临时文本区域
+        const textArea = document.createElement('textarea')
+        textArea.value = code
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy') // 使用 execCommand 进行复制，兼容性更好
+        document.body.removeChild(textArea) // 移除临时文本区域
+        // 可以添加复制成功的提示
+      }
       // 可以添加复制成功的提示
       copyBtn.textContent = '已复制'
       setTimeout(() => {

@@ -122,10 +122,10 @@ export default Vue.extend({
   },
   methods: {
     _initRender () {
-      document.querySelector('body').style.background = '#fff'
+    
     },
     _outRender () {
-      document.querySelector('body').style.background = ''
+      
     },
     onCreated (editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
@@ -296,6 +296,9 @@ export default Vue.extend({
 // :deep(.w-e-image-container){
 
 // }
+html,body,#app{
+  background: #fff!important;
+}
 .el-tag{
   cursor: pointer;
 }
@@ -305,7 +308,10 @@ video {
 }
 
 .editor-container {
+ min-height: 100vh;
   width: 100%;
+  margin-top:-8px;
+  background: #fff;
   margin-left: -7px;
 
   .header {

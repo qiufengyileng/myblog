@@ -218,13 +218,16 @@ export default {
     }
   },
   watch: {
-    isNight (newVal) {
-      if (newVal) {
-        this.currentTheme = 'anOldHope'
-      } else {
-        this.currentTheme = 'github'
-      }
-      this.codeStyle()
+    isNight: {
+      handler (newVal) {
+        if (newVal) {
+          this.currentTheme = 'anOldHope'
+        } else {
+          this.currentTheme = 'github'
+        }
+        this.codeStyle()
+      },
+      immediate: true
     }
   },
   data () {

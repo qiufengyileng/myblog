@@ -21,9 +21,6 @@ export default {
     ...mapState('setting', ['isNight'])
   },
   created () {
-    const style = document.createElement('style')
-    document.head.appendChild(style)
-    console.log('document', document)
     render(this.isNight)
     this.$store.dispatch('user/fetchPersonalCenterData')
   },
@@ -38,28 +35,12 @@ export default {
   }// 监听night的变化,全局设置主题颜色
 }
 function render (night) {
-  const style = document.querySelector('style')
-  console.log('style', style)
+  const target = document.querySelector('html')
   if (night) {
-    style.innerHTML = ` html{
-  --root-color: white!important;
-  color: var(--root-color);
-} 
-   body{
-      background-color: #000000ed;
-
-    }
-  `
+    target.classList.add('night')
     return
   }// 夜间背景颜色
-  style.innerHTML = `
-  html{
-  --root-color: #000!important;
-  color: var(--root-color);
-}
-    body{
-      background-color: white;
-    }`
+  target.classList.remove('night')
 }// 渲染背景颜色
 
 </script>
@@ -86,5 +67,8 @@ h2{
 /* html::-webkit-scrollbar {
   display: none;
 } */
- 
+ .night{
+  background-color: #000000!important;
+  color: #ffffff!important;
+ }
 </style>

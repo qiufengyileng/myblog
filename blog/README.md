@@ -31,3 +31,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 1月8日
 登入，写文章，文章阅读，等部分进行了完善
+
+### 2月26日
+访问在线网站时发现的一些小问题，在谷歌浏览器打开正常，但是微软浏览器打开切换主题时有bug，修复了一下
