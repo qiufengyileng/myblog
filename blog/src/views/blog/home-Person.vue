@@ -79,7 +79,7 @@ export default {
     }
   },
   mounted () {
-    console.log('getUserPersonalData', this.getUserPersonalData)
+    // console.log('getUserPersonalData', this.getUserPersonalData)
   }
 }
 </script>

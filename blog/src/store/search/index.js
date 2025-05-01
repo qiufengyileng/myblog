@@ -4,7 +4,8 @@ export default {
   state: {
     articleList: [],
     next: true,
-    change: false
+    change: false,
+    Ycoordinate: 0 // 用于记录滚动条的Y坐标
   },
   mutations: {
     setArticleList (state, articleList) {
@@ -22,15 +23,18 @@ export default {
     },
     setChange (state) {
       state.change = true
+    },
+    setYcoordinate (state, Ycoordinate) {
+      state.Ycoordinate = Ycoordinate
     }
   },
   actions: {
     async fetchArticleList ({ commit, state }, keyword) {
       try {
-        console.log('fetchArticleList', keyword)
+        // console.log('fetchArticleList', keyword)
         const reslut = await getSearchResult(keyword)
         const { data: articleList, next } = reslut
-        console.log('fetchArticleList', articleList, next)
+        // console.log('fetchArticleList', articleList, next)
         commit('setArticleList', articleList)
         // 如果next为0，则停止加载,更新数据
         if (!next) {
@@ -42,8 +46,8 @@ export default {
           commit('setNext', true)
         }
       } catch (error) {
-        console.log(error)
-        throw error
+        // console.log(error)
+        throw new Error('获取搜索结果失败')
       }
     }
   },

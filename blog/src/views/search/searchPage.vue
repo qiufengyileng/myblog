@@ -1,38 +1,75 @@
 <template>
   <div>
     <header-component></header-component>
-    <div class="blog-search" style="margin-top: 15vh;">
+    <div class="blog-search" style="margin-top: 15vh">
       <h1>博客文章搜索</h1>
       <div class="search-container">
-        <input v-model.trim="searchQuery" @keyup.enter="search" type="text" placeholder="搜索文章...">
-        <button class="search" @click="search"><i class="el-icon-search"
-            style="margin-right: 5px;margin-left: -5px;"></i>搜索</button>
-        <button class="moble-search" @click="search"><i class="el-icon-search"></i></button>
+        <input
+          v-model.trim="searchQuery"
+          @keyup.enter="search"
+          type="text"
+          placeholder="搜索文章..."
+        />
+        <button class="search" @click="search">
+          <i
+            class="el-icon-search"
+            style="margin-right: 5px; margin-left: -5px"
+          ></i
+          >搜索
+        </button>
+        <button class="moble-search" @click="search">
+          <i class="el-icon-search"></i>
+        </button>
       </div>
-      <h2 v-if="JSON.stringify(history) !== '[]'">搜索历史<i @click="delAllHistory" class="el-icon-delete"
-          style="cursor: pointer;font-size: medium;"></i></h2>
+      <h2 v-if="JSON.stringify(history) !== '[]'">
+        搜索历史<i
+          @click="delAllHistory"
+          class="el-icon-delete"
+          style="cursor: pointer; font-size: medium"
+        ></i>
+      </h2>
       <div class="tags-container">
         <div class="search-history">
-          <span v-for="(item, index) in history" :key="'history-' + index" class="history-tag"
-            @click="useHistoryItem(item)">
+          <span
+            v-for="(item, index) in history"
+            :key="'history-' + index"
+            class="history-tag"
+            @click="useHistoryItem(item)"
+          >
             {{ item }}
           </span>
         </div>
         <h2>推荐搜索</h2>
         <div class="category-tags">
-          <span v-for="(category, index) in categories" :key="'category-' + index" class="category-tag"
-            :class="{ active: selectedCategory === category }" @click="selectCategory(category)">
+          <span
+            v-for="(category, index) in categories"
+            :key="'category-' + index"
+            class="category-tag"
+            :class="{ active: selectedCategory === category }"
+            @click="selectCategory(category)"
+          >
             {{ category }}
           </span>
         </div>
         <h2 v-show="articleList.length !== 0">文章列表</h2>
         <h2 v-show="articleList.length === 0">没有找到对应文章</h2>
         <articleList :articles="articleList"></articleList>
-        <div ref="lazyLoad" v-show="next" class="loading-container" v-loading="next" element-loading-text="加载中..."
-          element-loading-background="rgba(0, 0, 0, 0.8)">
-        </div>
-        <div v-show="!next && articleList.length !== 0" style="text-align: center;margin-top: 1rem;">已经到底了
-          <span style="font-size: 1.2rem;" ref="kaomoji">{{ selectedKaomoji }}</span>
+        <div
+          ref="lazyLoad"
+          v-show="next"
+          class="loading-container"
+          v-loading="next"
+          element-loading-text="加载中..."
+          element-loading-background="rgba(0, 0, 0, 0.8)"
+        ></div>
+        <div
+          v-show="!next && articleList.length !== 0"
+          style="text-align: center; margin-top: 1rem"
+        >
+          已经到底了
+          <span style="font-size: 1.2rem" ref="kaomoji">{{
+            selectedKaomoji
+          }}</span>
         </div>
       </div>
     </div>
@@ -47,7 +84,6 @@ export default {
   components: {
     headerComponent,
     articleList
-
   },
   data () {
     return {
@@ -60,11 +96,27 @@ export default {
       isLoading: false,
       selectedKaomoji: '',
       KaomojiTable: [
-        '(๑•̀ㅂ•́)و✧', '(・̀ ω・́ ) y', '(づ｡◕‿‿◕｡) づ',
-        'φ(≧ω≦*)♪', '︿(￣︶￣)︿', 'o(*^＠^*)o', 'Ψ(￣∀￣)Ψ',
-        'o(￣▽￣)ｄ', '(o゜▽゜)o☆[BINGO!]', 'Ciallo～(∠・ω< )⌒★',
-        'ヽ(*´▽｀*)ﾉ', '٩(๑❛ᴗ❛๑)۶', '๑•̀ㅁ•́ฅ✧', '｡◕‿◕｡',
-        'ヾ(≧▽≦*)o', '(*^_^*)', '∑(っ °Д °;)っ', 'ಠ_ಠ', '¬‿¬', 'ʕ •ᴥ•ʔ']
+        '(๑•̀ㅂ•́)و✧',
+        '(・̀ ω・́ ) y',
+        '(づ｡◕‿‿◕｡) づ',
+        'φ(≧ω≦*)♪',
+        '︿(￣︶￣)︿',
+        'o(*^＠^*)o',
+        'Ψ(￣∀￣)Ψ',
+        'o(￣▽￣)ｄ',
+        '(o゜▽゜)o☆[BINGO!]',
+        'Ciallo～(∠・ω< )⌒★',
+        'ヽ(*´▽｀*)ﾉ',
+        '٩(๑❛ᴗ❛๑)۶',
+        '๑•̀ㅁ•́ฅ✧',
+        '｡◕‿◕｡',
+        'ヾ(≧▽≦*)o',
+        '(*^_^*)',
+        '∑(っ °Д °;)っ',
+        'ಠ_ಠ',
+        '¬‿¬',
+        'ʕ •ᴥ•ʔ'
+      ]
     }
   },
   created () {
@@ -78,14 +130,14 @@ export default {
   },
   methods: {
     selectCategory (e) {
-      console.log(e)
+      // console.log(e)
       this.$store.commit('user/addHistory', e)
       this.searchQuery = e
       // 选择分类,开始搜索
       this.search()
     },
     search () {
-      console.log('搜索', this.searchQuery)
+      // console.log('搜索', this.searchQuery)
       if (this.searchQuery === '') {
         return
       }
@@ -100,13 +152,14 @@ export default {
       this.observer.disconnect()
       // 添加懒加载
       this.$nextTick(() => {
-        debugger
         this.currentPage = 1
+        this.$store.commit('search/setNext', true)
         this.addLazyLoad()
       })
     },
     getKaomoji () {
-      this.selectedKaomoji = this.KaomojiTable[Math.floor(Math.random() * this.KaomojiTable.length)]
+      this.selectedKaomoji =
+        this.KaomojiTable[Math.floor(Math.random() * this.KaomojiTable.length)]
     },
     // 懒加载
     async lazyLoad () {
@@ -117,16 +170,19 @@ export default {
       this.isLoading = true
       // 发送请求
       try {
-        await this.getArticleList({ keyword: this.searchQueryStore, page: ++this.currentPage })
+        await this.getArticleList({
+          keyword: this.searchQueryStore,
+          page: ++this.currentPage
+        })
       } catch (error) {
-        console.log(error)
-        throw error
+        // console.log(error)
+        throw new Error('加载失败')
       } finally {
         this.isLoading = false
         // 如果next为0，则停止加载
         if (!this.next) {
           // 停止加载
-          console.log('停止加载')
+          // console.log('停止加载')
           // 表情
           this.getKaomoji()
           this.observer.unobserve(this.$refs.lazyLoad)
@@ -142,41 +198,62 @@ export default {
       try {
         await this.$store.dispatch('search/fetchArticleList', keyword)
       } catch (error) {
-        console.log(error)
-        throw error
+        // console.log(error)
+        throw new Error('加载失败')
       }
     },
     useHistoryItem (item) {
-      console.log('使用历史记录', item)
+      // console.log('使用历史记录', item)
       this.searchQuery = item
       this.search()
     },
     addLazyLoad () {
-      this.observer = new IntersectionObserver(entries => {
-        console.log('entries', '添加懒加载状态', this.next)
-        if (entries[0].isIntersecting && !this.isLoading && this.next) {
-          this.lazyLoad()
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          // console.log('entries', '添加懒加载状态', entries[0].isIntersecting, this.next)
+          if (entries[0].isIntersecting && !this.isLoading && this.next) {
+            this.lazyLoad()
+          }
+          if (entries[0].isIntersecting && !this.next) {
+            this.getKaomoji()
+          }
+        },
+        {
+          // 设置阈值，当元素的10%进入可视区域时触发
+          threshold: 0.1
         }
-        if (entries[0].isIntersecting && !this.next) {
-          this.getKaomoji()
-        }
-      }, {
-        // 设置阈值，当元素的10%进入可视区域时触发
-        threshold: 0.1
-      })
-
-      if (this.$refs.lazyLoad) {
+      )
+      if (!this.next) {
+        this.observer.observe(this.$refs.kaomoji)
+      } else {
         this.observer.observe(this.$refs.lazyLoad)
       }
+      
     }
   },
   mounted () {
+    // 回到上次的滚动位置
+    const Ycoordinate = this.$store.state.search.Ycoordinate
+    if (Ycoordinate) {
+      // console.log('回到上次的滚动位置', Ycoordinate)
+      this.$nextTick(() => {
+        window.scrollTo(0, Ycoordinate)
+      })
+    }
+    // console.log('动画图片加载')
     this.addLazyLoad()
   },
-  destroyed () {
-    // 停止对所有元素的监听
-    this.observer.disconnect()
+  // 在路由离开前，我们要记录一下Y轴的滚动位置
+  beforeRouteLeave (to, from, next) {
+    const Ycoordinate = window.scrollY
+    // //console.log('beforeRouteLeave', Ycoordinate)
+    this.$store.commit('search/setYcoordinate', Ycoordinate)
+    next()
   }
+  // destroyed () {
+  //   // 停止对所有元素的监听
+  //   this.observer.disconnect()
+  // }
 }
 </script>
 

@@ -11,13 +11,13 @@ export default {
     },
     setDataTotal (state, dataTotal) {
       state.dataTotal = dataTotal[0].total
-      console.log('setDataTotal', state.dataTotal)
+      // console.log('setDataTotal', state.dataTotal)
     }
   },
   actions: {
     async getDataTotal ({ commit }) {
       const dataTotal = await fetchDataTotal()
-      console.log('getDataTotal', dataTotal)
+      // console.log('getDataTotal', dataTotal)
       commit('setDataTotal', dataTotal)
     }
   }

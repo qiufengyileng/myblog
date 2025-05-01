@@ -39,7 +39,6 @@ export default {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
       this.$emit('update:dynamicTags', this.dynamicTags)
     },
-
     showInput () {
       this.inputVisible = true
       this.$nextTick(_ => {
@@ -70,7 +69,7 @@ export default {
     }
   },
   beforeDestroy () {
-    console.log('beforeDestroy')
+    // console.log('beforeDestroy')
   }
 }
 </script>

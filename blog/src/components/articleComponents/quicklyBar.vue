@@ -4,7 +4,7 @@
     <ul class="quick-nav-list">
       <li class="quick-nav-item" @click="scrollToTop" style="cursor: pointer; ">返回顶部</li>
       <li v-for="(section, index) in sections" :key="index" class="quick-nav-item">
-        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose === `${index+1}`}"
+        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose[1] === `${index+1}`}"
          style="cursor: pointer;
         text-decoration: none;
         color: inherit;
@@ -26,10 +26,14 @@ export default {
   computed: {
     choose: {
       get () {
+        // 如果chose[0]和当前路由的id相同，则返回store中的choose
+        // 否则返回null
+        // console.log('this.$route.params.id', this.$route.query.id, this.$store.state.article.choose[0])
+        if (+this.$route.query.id !== this.$store.state.article.choose[0]) return [null, null]
         return this.$store.state.article.choose
       },
       set (value) {
-        this.$store.commit('article/setChoose', value)
+        this.$store.commit('article/setChoose', [this.$store.state.article.fullArticle.article_id, value])
       }
     }
   },
@@ -38,14 +42,14 @@ export default {
     this.$nextTick(() => {
       this.sections = this.getSections()
       this.title = document.querySelector('#title').textContent
-      // console.log(this.sections)
+      // //console.log(this.sections)
     })
     // 等待dom结点被渲染猴读取，再执行
   },
   methods: {
     getSections () {
       const headings = document.querySelector('article').querySelectorAll('h2')
-      console.log('heading', headings) 
+      // console.log('heading', headings) 
       return Array.from(headings).map(h => h.textContent)
     },
     scrollToTop () {
@@ -55,12 +59,12 @@ export default {
     scrollToSection (sectionId) {
       // 设置choose
       this.choose = sectionId
-      // console.log(this.sections)
+      // //console.log(this.sections)
       const element = document.querySelector(`h2[data-id="${sectionId}"]`)
-      console.log('element', element)
+      // console.log('element', element)
       const height = document.body.scrollHeight
-      console.log('height', height)
-      console.log('off', element.offsetTop)
+      // console.log('height', height)
+      // console.log('off', element.offsetTop)
       if (element) {
         const offset = 65 // 距离视口顶部的距离
         const yPosition = element.offsetTop - offset
@@ -68,10 +72,14 @@ export default {
           element.scrollIntoView({ behavior: 'smooth' })
           return
         }
-        console.log(yPosition)
+        // console.log(yPosition)
         window.scrollTo({ top: yPosition, behavior: 'smooth' })
       }
     }
+  },
+  destroyed () {
+    // console.log('destroyed++++')
+    // this.$store.commit('article/setChoose', [this.$store.state.article.fullArticle.article_id, null])
   }
 }
 </script>

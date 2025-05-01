@@ -1,7 +1,7 @@
 import request from '@/utils/interceptor'
 
 export const fetchSaveArticle = (data) => {
-  console.log('fetchSaveArticle', data)
+  // console.log('fetchSaveArticle', data)
   return request.post('/write/saveArticle', data)
 }
 

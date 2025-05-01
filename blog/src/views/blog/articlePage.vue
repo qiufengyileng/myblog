@@ -93,7 +93,7 @@ export default {
     }
   },
   async created () {
-    console.log('进入articlePage组件')
+    // console.log('进入articlePage组件')
     await this.$store.dispatch('article/fetchArticleById', this.$route.query.id)
   },
   computed: {
@@ -108,7 +108,7 @@ export default {
       }
     },
     articleData () {
-      console.log('articleData', this.getFullArticle)
+      // //console.log('articleData', this.getFullArticle)
       return this.getFullArticle
     }
   },
@@ -179,7 +179,7 @@ export default {
     }
   },
   destroyed () {
-    console.log('离开articlePage组件')
+    // console.log('离开articlePage组件')
     document.querySelector('html').style.overflow = 'auto'
     this.$store.commit('article/setFullArticle', null)
   }

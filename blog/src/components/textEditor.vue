@@ -91,7 +91,7 @@ export default {
     value (value) {
       // HTML
       const isSame = this.editor.getHTML() === value
-      console.log('isSame', isSame, 'value', value, 'html', this.editor.getHTML())
+      // console.log('isSame', isSame, 'value', value, 'html', this.editor.getHTML())
 
       // JSON
       // const isSame = JSON.stringify(this.editor.getJSON()) === JSON.stringify(value)

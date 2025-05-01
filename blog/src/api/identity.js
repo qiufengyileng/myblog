@@ -1,8 +1,8 @@
 import request from '@/utils/interceptor'
 import { setName, setToken } from '@/utils/storage'
 const checkIdentity = async (username, password) => {
-  console.log('验证身份接口被调用')
-  const { mes, indentity, token } = await request.post('/user/identity', {
+  // console.log('验证身份接口被调用')
+  const { indentity, token } = await request.post('/user/identity', {
     username,
     password
   })
@@ -10,7 +10,7 @@ const checkIdentity = async (username, password) => {
     if (username) setName(username)
     if (token) setToken(token)
   }
-  console.log(mes, indentity)
+  // console.log(mes, indentity)
   return indentity
 }// 验证身份的接口
 

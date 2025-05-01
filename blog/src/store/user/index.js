@@ -23,16 +23,16 @@ export default {
       state.token = payload.token
     },
     setPersonalCenterData (state, paload) {
-      console.log('setPersonalCenterData', paload)
+      // console.log('setPersonalCenterData', paload)
       state.userData = paload
     },
     addHistory (state, history) {
       if (state.history.includes(history)) {
-        console.log('重复添加')
+        // console.log('重复添加')
         return
       }
       state.history.push(history)
-      console.log('addHistory', state.history)
+      // console.log('addHistory', state.history)
       setHistory(state.history)
     },
     setMessage (state, message) {
@@ -44,7 +44,7 @@ export default {
     },
     upateData (state, paload) {
       delUserData()
-      console.log('upateData', paload)
+      // console.log('upateData', paload)
       state.userData = paload
     },
     clearUserData (state) {
@@ -58,7 +58,7 @@ export default {
       delToken()
       // 清除本地保存的history
       delHistory()
-      console.log('clearUserData', '退出登录成功')
+      // console.log('clearUserData', '退出登录成功')
       // 消息
       Message.success('退出登录成功')
       // 刷新页面
@@ -67,26 +67,26 @@ export default {
     setUserAvatar (state, avatar) {
       state.userData.avatar = avatar
       setUserData(state.userData)
-      console.log('setUserAvatar', state.userData)
+      // console.log('setUserAvatar', state.userData)
     },
     setUserPassword (state, password) {
       state.userData.password = password
       updateUserPassword(password)
-      console.log('setUserPassword', state.userData)
+      // console.log('setUserPassword', state.userData)
     }
   },
   actions: {
     async fetchCheckIdentity ({ commit }, payload) {
-      // console.log('checkIdentity', payload)
+      // //console.log('checkIdentity', payload)
       const indentity = await checkIdentity(payload.username, payload.password)
-      // console.log('checkIdentity', indentity)
+      // //console.log('checkIdentity', indentity)
       commit('setIdentity', indentity)
     },
     // 获取用户个人信息
     async fetchPersonalCenterData ({ commit }) {
       const data = await getPersonalCenterData()
       if (data[0]) {
-        console.log('data[0]', data[0], typeof data[0])
+        // console.log('data[0]', data[0], typeof data[0])
         setUserData(data[0])
       }
       commit('setPersonalCenterData', data[0])

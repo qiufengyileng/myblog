@@ -25,11 +25,11 @@ export default {
     this.$store.dispatch('user/fetchPersonalCenterData')
   },
   mounted () {
-    console.log('mounted', document.querySelector('.el-message'))
+    // console.log('mounted', document.querySelector('.el-message'))
   },
   watch: {
     isNight () {
-      console.log('watch', this.isNight)
+      // console.log('watch', this.isNight)
       render(this.isNight)
     }
   }// 监听night的变化,全局设置主题颜色

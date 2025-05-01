@@ -11,8 +11,15 @@ export default {
   },
   mutations: {
     setArticleData (state, articleData) {
-      console.log('setArticleData', articleData)
+      // console.log('setArticleData', articleData)
       state.articleData = { ...articleData }
+    },
+    cleararticleData (state) {
+      state.articleData = {
+        title: '',
+        html: '',
+        tags: []
+      }
     },
     setSaveArticleDisabled (state, saveArticleDisabled) {
       state.saveArticleDisabled = saveArticleDisabled

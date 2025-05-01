@@ -9,13 +9,13 @@
             标签选择<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" style="width: 400px;">
-           <ChooseTag 
+           <ChooseTag ref="chooseTag"
             @update:dynamicTags="articleData.tags = $event"
            />
           </el-dropdown-menu>
         </el-dropdown>
-        <el-button type="primary" @click="saveArticle" :disabled="saveArticleDisabled">保存</el-button>
-        <el-button @click="saveDraft">草稿</el-button>
+        <el-button type="primary" @click="saveArticle" :disabled="saveArticleDisabled">完成</el-button>
+        <el-button @click="saveDraft">保存为草稿</el-button>
         <img :src="avatar" alt="用户头像" title='前往个人中心' class="avatar" @click="$router.push('/personalCenter')">
       </div>
     </div>
@@ -26,19 +26,19 @@
   </div>
 </template>
 <script>
-import Vue from 'vue'
+
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { DomEditor } from '@wangeditor/editor'
+// import { DomEditor } from '@wangeditor/editor'
 import { fetchSaveArticle } from '@/api/article'
 import dayjs from 'dayjs'
 import ChooseTag from '@/views/write/chooseTag.vue'
 import '@wangeditor/editor/dist/css/style.css'
 
-export default Vue.extend({
+export default ({
   components: { Editor, Toolbar, ChooseTag },
   created () {
     this.articleData = { ...this.$store.state.write.articleData }
-    console.log('articleData', this.articleData)
+    // console.log('articleData', this.articleData)
     this.saveArticleDisabled = this.$store.state.write.saveArticleDisabled
   },
   data () {
@@ -130,7 +130,7 @@ export default Vue.extend({
     onCreated (editor) {
       this.editor = Object.seal(editor) // 一定要用 Object.seal() ，否则会报错
       // 配置config
-      console.log('editor', editor)
+      // console.log('editor', editor)
       this.$nextTick(() => {
         // 初始化
         this.getConfig()
@@ -140,17 +140,17 @@ export default Vue.extend({
       this.getHTML()
     },
     getHTML () {
-      console.log('getHTML', this.editor.getHtml())
+      // console.log('getHTML', this.editor.getHtml())
       // this.editor.disable()
     },
     getConfig () {
-      const editor = this.editor // 获取 editor 实例
-      if (editor == null) return
+      // const editor = this.editor // 获取 editor 实例
+      // if (editor == null) return
 
-      const toolbar = DomEditor.getToolbar(this.editor)
-      console.log('toolbar', toolbar)
-      const config = toolbar.getConfig()
-      console.log('config', config.toolbarKeys)
+      // const toolbar = DomEditor.getToolbar(this.editor)
+      // console.log('toolbar', toolbar)
+      // const config = toolbar.getConfig()
+      // console.log('config', config.toolbarKeys)
     },
     // 禁止滚动（保证在背景颜色为白色时，滚动条不显示）
     preventScroll () {
@@ -200,30 +200,37 @@ export default Vue.extend({
           author: this.$store.state.user.username
         })
         if (res.message === 'ok') {
-          this.$message.success('保存成功')
+          this.$message.success('上传成功')
           // 保存成功后，禁用可写模式
           // this.editor.disable()
           // toolbar不可见
           this.showToolbar = false
-          // 保存数据
-          this.storeData()
+          // // 保存数据
+          // this.storeData()
           // 保存成功后，禁用保存按钮
-          this.$store.commit('write/setSaveArticleDisabled', true)
+          // this.$store.commit('write/setSaveArticleDisabled', true)
+          // 清空仓库中的数据 
+          this.$store.commit('write/cleararticleData')
+          // 清空编辑器，title和标签中的数据
+          this.editor.clear()
+          this.articleData = {}
+          this.$refs.chooseTag._data.dynamicTags = [] // 清空标签
+          // console.log(this.$refs.chooseTag, 'this.$refs.chooseTag.clearTags())')  
         } else {
           if (res.message === '超过最大文章数，添加文章失败') {
             this.$message.error('每日限制3篇文章,请明天再试')
             return
           }
-          this.$message.error('保存失败')
+          this.$message.error('上传成功')
         }
 
       } catch (error) {
-        console.log('error', error)
+        // console.log('error', error)
       }
     },
     saveDraft () {
-      const html = this.editor.getHtml()
-      console.log('saveDraft', html)
+      // const html = this.editor.getHtml()
+      // console.log('saveDraft', html)
       this.storeData()
       this.$message.warning('草稿箱部分未完成！！！')
     },

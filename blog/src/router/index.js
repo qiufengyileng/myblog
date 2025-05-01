@@ -65,13 +65,13 @@ const router = new VueRouter({
 })
 const pass = async () => {
   const pass = await checkIdentity()
-  console.log('pass', pass)
+  // console.log('pass', pass)
   // 直接token判断
   return pass
 }// 判断是否已经通过
 const pathList = ['/personalCenter', '/writeArticle']
 router.beforeEach(async (to, from, next) => {
-  console.log('跳转', to.path)
+  // console.log('跳转', to.path)
   // 进度条开始
   Nprogress.start()
   try {
@@ -90,10 +90,10 @@ router.beforeEach(async (to, from, next) => {
       Nprogress.done()
       return
     }// 判断是否已经登录，没有登录则跳转到登录界面
-    console.log('跳转', to.path, '成功')
+    // console.log('跳转', to.path, '成功')
     next()
   } catch (error) {
-    console.log('跳转', to.path, '失败')
+    // console.log('跳转', to.path, '失败')
     next()
   }
 })

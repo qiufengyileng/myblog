@@ -54,12 +54,13 @@
   
   </div>
   <!-- 更改头像弹框 -->
+  <!-- 124.220.12.190 -->
   <el-dialog title="更改头像" :visible.sync="dialogVisible" 
   center
   width="30%">
     <el-upload
   class="avatar-uploader"
-  action="http://localhost:3000/user/uploadAvatar"
+  action="http://124.220.12.190:3000/user/uploadAvatar"
   :show-file-list="false"
   :on-success="handleAvatarSuccess"
   :before-upload="beforeAvatarUpload">
@@ -122,7 +123,7 @@ export default {
     if (!this.userData) {
       this.$store.dispatch('user/fetchPersonalCenterData')
     }
-    console.log('this.userData', this.user)
+    // console.log('this.userData', this.user)
     this.chageData = { ...this.user }
   },
   data () {
@@ -165,16 +166,16 @@ export default {
             newValue[key] = newValue[key] === true ? 1 : 0
           }
         }
-        console.log('newValue', newValue)
+        // console.log('newValue', newValue)
         this.chageData = newValue
-        console.log('this.chageData', this.chageData)
+        // console.log('this.chageData', this.chageData)
       }
     }
   },
   methods: {
     changeAvatar () {
       // 实现更换头像的逻辑
-      console.log('更换头像')
+      // console.log('更换头像')
       this.dialogVisible = true
     },
     saveChanges () {
@@ -200,6 +201,7 @@ export default {
         // 更新本地头像URL
           this.$store.commit('user/setUserAvatar', response.avatarUrl)
           this.$message.success('头像更新成功')
+          this.imageUrl = ''
         } else {
           this.$message.error('头像更新失败')
         }

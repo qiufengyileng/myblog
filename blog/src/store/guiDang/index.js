@@ -12,7 +12,7 @@ export default {
   actions: {
     async fetchGuiDangData ({ commit }) {
       const dataList = await getGuiDangData()
-      console.log('fetchGuiDangData', dataList)
+      // console.log('fetchGuiDangData', dataList)
       commit('setDataList', dataList)
     }
   },

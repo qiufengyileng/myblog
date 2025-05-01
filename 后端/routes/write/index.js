@@ -2,10 +2,10 @@ import express from 'express';
 import { handleDataFromDB } from '../../connectMsql.js'
 const router = express.Router()
 const timeLimit = 60*60*24// 一天的秒数
-let maxArticleNums = 3
+let maxArticleNums = 1000
 
 setInterval(() => {
-maxArticleNums = 3  
+maxArticleNums = 1000  
 }, timeLimit * 1000)
 
 // POST /write/add - 添加文章

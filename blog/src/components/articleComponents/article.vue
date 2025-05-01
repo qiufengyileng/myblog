@@ -267,7 +267,7 @@ export default {
     this.codeStyle()
     // 监听主题切换
     document.addEventListener('changeTheme', () => {
-      console.log('切换主题')
+      // console.log('切换主题')
       this.changeTheme()
     })
   },

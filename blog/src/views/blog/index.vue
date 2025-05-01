@@ -82,7 +82,6 @@
 import { mapState, mapGetters } from 'vuex'
 import Clock from '@/components/clock.vue'
 import HomePersonComponent from '@/views/blog/home-Person.vue'
-// import imge from '@/assets/blog/符华.jpg'
 import HeaderComponent from '@/components/header.vue'
 import FooterComponent from '@/components/footer.vue'
 
@@ -95,7 +94,7 @@ export default {
     HomePersonComponent
   },
   created () {
-    this.$store.dispatch('article/fetchArticleList', this.currentPage).then(() => this.getArticleList())
+    this.$store.dispatch('article/fetchArticleList', this.currentPage)
       .catch(error => {
         console.error('Error fetching article list:', error)
       })
@@ -143,14 +142,13 @@ export default {
       this.Timer = setTimeout(() => {
         // 本页刷新
         this.$store.dispatch('article/fetchArticleList', this.currentPage)
-          .then(() => this.getArticleList)
           .catch(error => {
-            console.error('Error fetching article list:', error)
+            console.log('Error fetching article list:', error)
           })
       }, 300)
     },
     handleCurrentChange (val) {
-      console.log('handleCurrentChange', val)
+      // console.log('handleCurrentChange', val)
       // 设置当前页码
       this.$store.commit('home/setCurrentPage', val)
       // 请求数据

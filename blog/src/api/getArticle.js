@@ -1,7 +1,7 @@
 import request from '@/utils/interceptor'
 
 const getArticleList = (page) => {
-  console.log('/article/list?page=', page)
+  // console.log('/article/list?page=', page)
   return request.get(`/article/list?page=${page}`)
 }
 const getFullArticleById = (id) => {

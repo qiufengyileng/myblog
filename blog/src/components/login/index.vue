@@ -31,7 +31,7 @@ export default {
   data () {
     // 自定义验证用户名
     const validateUsername = (rule, value, callback) => {
-      console.log(rule, value)
+      // console.log(rule, value)
       const reg = /^[\u4e00-\u9fa5]{0,10}$/
       if (!value) {
         return callback(new Error('请输入用户名'))
@@ -104,7 +104,7 @@ export default {
           if (valid) {
             resolve(true)
           } else {
-            console.log('error submit!!')
+            // console.log('error submit!!')
             reject(new Error('请填写用户名和密码'))
           }
         })
@@ -125,7 +125,7 @@ export default {
       // 登入接口调用
       try {
         const indentity = await checkIdentity(this.form.username, this.form.password)
-        console.log('indentity', indentity)
+        // console.log('indentity', indentity)
         if (indentity) {
           this.$message.success('登录成功')
           this.$store.commit('login/setVisible', false)
