@@ -6,7 +6,7 @@ export default {
     fullArticle: null,
     articleList: [],
     errorStatus: false,
-    choose: [null, null] // 选择的文章id和选择的内容
+    choose: null 
   },
   mutations: {
     setArticleList (state, articleList) {

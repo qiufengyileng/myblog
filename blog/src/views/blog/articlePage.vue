@@ -182,6 +182,10 @@ export default {
     // console.log('离开articlePage组件')
     document.querySelector('html').style.overflow = 'auto'
     this.$store.commit('article/setFullArticle', null)
+  },
+  beforeRouteLeave (to, from, next) {
+    this.$store.commit('article/setChoose', null)
+    next()
   }
 }
 </script>

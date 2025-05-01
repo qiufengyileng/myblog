@@ -4,7 +4,7 @@
     <ul class="quick-nav-list">
       <li class="quick-nav-item" @click="scrollToTop" style="cursor: pointer; ">返回顶部</li>
       <li v-for="(section, index) in sections" :key="index" class="quick-nav-item">
-        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose[1] === `${index+1}`}"
+        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose === `${index+1}`}"
          style="cursor: pointer;
         text-decoration: none;
         color: inherit;
@@ -26,14 +26,10 @@ export default {
   computed: {
     choose: {
       get () {
-        // 如果chose[0]和当前路由的id相同，则返回store中的choose
-        // 否则返回null
-        // console.log('this.$route.params.id', this.$route.query.id, this.$store.state.article.choose[0])
-        if (+this.$route.query.id !== this.$store.state.article.choose[0]) return [null, null]
         return this.$store.state.article.choose
       },
       set (value) {
-        this.$store.commit('article/setChoose', [this.$store.state.article.fullArticle.article_id, value])
+        this.$store.commit('article/setChoose', value)
       }
     }
   },
