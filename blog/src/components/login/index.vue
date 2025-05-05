@@ -2,7 +2,7 @@
   <div>
    <el-dialog :visible="visible"
     title="登录"
-    width="30%"
+    :width="isMobile? '90%':'30%'"
     :before-close="handleClose"
     :append-to-body="true">
 <el-form :model="form"
@@ -70,7 +70,8 @@ export default {
     }
   },
   computed: {
-    ...mapState('login', ['visible'])
+    ...mapState('login', ['visible']),
+    ...mapState('setting', ['isMobile'])
   },
   watch: {
     visible (newVal) {
@@ -129,8 +130,7 @@ export default {
         if (indentity) {
           this.$message.success('登录成功')
           this.$store.commit('login/setVisible', false)
-          // 刷新页面
-          this.$router.go(0)
+
         } else {
           this.$message.error('登录失败')
         }
