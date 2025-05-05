@@ -1,9 +1,8 @@
 <template>
-      
   <div id="app">
-    <link rel="stylesheet">
+    <link rel="stylesheet" />
     <keep-alive>
-      <router-view :key="+new Date()"/>
+      <router-view :key="+new Date()" />
     </keep-alive>
     <!-- 登录组件 -->
     <LoginComponent />
@@ -32,43 +31,62 @@ export default {
       // console.log('watch', this.isNight)
       render(this.isNight)
     }
-  }// 监听night的变化,全局设置主题颜色
+  } // 监听night的变化,全局设置主题颜色
 }
 function render (night) {
   const target = document.querySelector('html')
   if (night) {
     target.classList.add('night')
     return
-  }// 夜间背景颜色
+  } // 夜间背景颜色
   target.classList.remove('night')
-}// 渲染背景颜色
-
+} // 渲染背景颜色
 </script>
 <style>
-html{
+:root {
+  --barwidth: 0px;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-overflow: ellipsis;
+}
+html {
   overflow: scroll;
   position: relative;
   overflow-x: hidden;
 }
-body{
+body {
   width: 100vw;
+  margin: 0;
+  padding: 0;
 }
 .text-inverted {
-            color: inherit; /* 设置文本颜色 */
-            background-color:inherit; /* 设置背景颜色 */
-            mix-blend-mode: difference; /* 使用混合模式来反转颜色 */
-        }
-h2{
+  color: inherit; /* 设置文本颜色 */
+  background-color: inherit; /* 设置背景颜色 */
+  mix-blend-mode: difference; /* 使用混合模式来反转颜色 */
+}
+h2 {
   color: inherit !important;
 }
-.el-message{
-  z-index: 999999999999999999999999999999999!important;
+.el-message {
+  z-index: 999999999999999 !important;
 }
 /* html::-webkit-scrollbar {
   display: none;
 } */
- .night{
-  background-color: #000000!important;
-  color: #ffffff!important;
- }
+.night {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
 </style>

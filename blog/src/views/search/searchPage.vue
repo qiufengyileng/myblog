@@ -228,7 +228,6 @@ export default {
       } else {
         this.observer.observe(this.$refs.lazyLoad)
       }
-      
     }
   },
   mounted () {
@@ -352,7 +351,7 @@ input:focus {
   color: white;
 }
 
-@media screen and (max-width: 740px) {
+@media screen and (max-width: 600px) {
   .search {
     display: none;
   }
@@ -361,9 +360,13 @@ input:focus {
     display: inline-block;
     border: none;
     height: 38.4px;
-    margin-left: 1px;
-    border-radius: 2px;
+    margin-left: 3px;
+    border-radius: 8px;
     width: 39px;
+  }
+  .moble-search:active{
+    background-color: rgb(205, 234, 246);
+    scale: 1.1;
   }
 }
 

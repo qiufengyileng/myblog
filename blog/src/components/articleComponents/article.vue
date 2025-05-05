@@ -302,6 +302,7 @@ export default {
 <style scoped>
 article {
   padding: 2vw 4vw;
+  margin-right: 2rem;
   background-color: #dcf1a2;
   border-radius: 0.5vw;
   font: 1em '宋体';

@@ -43,5 +43,15 @@ const app = new Vue({
   render: h => h(App)
 })
 Vue.prototype.$message = Message
-
+// 获取页面的宽度
+const viewportWidth = window.innerWidth || document.documentElement.clientWidth
+// 是否为移动端
+if (viewportWidth < 768) {
+  // 移动端
+  // Vue.prototype.$isMobile = true
+  // Vue.prototype.$MobileAtrrs = {
+  //   width: viewportWidth + 'px'
+  // }
+  store.commit('setting/setMobile', true)
+}
 app.$mount('#app')

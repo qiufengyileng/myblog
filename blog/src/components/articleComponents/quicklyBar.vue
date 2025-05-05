@@ -92,7 +92,6 @@ export default {
   /* background-color: #f8f8f8; */
   padding: 15px;
   border-radius: 8px;
-  max-width: 250px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
 }

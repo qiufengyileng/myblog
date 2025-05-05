@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header id="header" style="z-index: 999999!important;">
+    <header id="header" style="z-index: 999999 !important">
       <!-- pc端的菜单栏 -->
       <nav class="navbar">
         <div class="navbar-container">
@@ -8,47 +8,104 @@
             <a href="/">秋风易冷</a>
           </div>
           <ul class="navbar-menu">
-            <li><router-link to="/blog" class="navbar-item"> 首页</router-link></li>
-            <li><router-link to="/writeArticle" class="navbar-item">写文章</router-link></li>
-            <li><router-link to="/about" class="navbar-item">关于</router-link></li>
-            <li><router-link to="/contact" class="navbar-item">联系我们</router-link></li>
-            <label class="switch">
-          <input type="checkbox" v-model="nightMode">
-          <span class="slider round"></span>
-        </label>
+            <li>
+              <router-link to="/blog" class="navbar-item"> 首页</router-link>
+            </li>
+            <li>
+              <router-link to="/writeArticle" class="navbar-item"
+                >写文章</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/about" class="navbar-item">关于</router-link>
+            </li>
+            <li>
+              <router-link to="/contact" class="navbar-item"
+                >联系我们</router-link
+              >
+            </li>
+            <li>
+              <label class="switch">
+                <input type="checkbox" v-model="nightMode" />
+                <span class="slider round"></span>
+              </label>
+            </li>
           </ul>
-
         </div>
       </nav>
       <!-- 快速导航栏按钮 -->
-      <button class="quicklyBarButton" @click="Toclose">
-        大纲
-      </button>
-      <i class="el-icon-arrow-left" @click="$router.go(-1)" style="margin-left: 0.5rem;"></i>
+      <button class="quicklyBarButton" @click="Toclose">大纲</button>
+      <i
+        class="el-icon-arrow-left"
+        @click="$router.go(-1)"
+        style="margin-left: 0.5rem"
+      ></i>
       <!-- 移动端的菜单栏 -->
       <nav class="el-icon-menu navbar-mobile" @click="ifRightClose">
         <!-- <i class="" style="font-size: 2rem;"></i> -->
       </nav>
       <div class="navbar-mobile-container">
-        <div class="navbar-mobile-toggle" :style="!isNight ? 'background-color: white' : ''">
-          <i style="width: 1.3rem;font-size: 1.3rem;position: relative;top: 1rem;left: 1rem;" @click="ifRightClose">x</i>
+        <div
+          class="navbar-mobile-toggle"
+          :style="!isNight ? 'background-color: white' : ''"
+        >
+          <i
+            style="
+              width: 1.3rem;
+              font-size: 1.3rem;
+              position: relative;
+              top: 1rem;
+              left: 1rem;
+            "
+            @click="ifRightClose"
+            >x</i
+          >
           <!-- 关闭按钮 -->
           <div class="navbar-mobile-items">
             <li>
-              <div class="toggle-line" @click="changeTheme"><i
-                  :class="{ 'el-icon-moon ': isNight, 'el-icon-sunny': !isNight }"></i>{{ !isNight ? '日间模式' : '夜间模式' }}</div>
+              <div class="toggle-line" @click="changeTheme">
+                <i
+                  :class="{
+                    'el-icon-moon ': isNight,
+                    'el-icon-sunny': !isNight,
+                  }"
+                ></i
+                >{{ !isNight ? "日间模式" : "夜间模式" }}
+              </div>
             </li>
-            <li><router-link to="/blog" class="toggle-line"><i class="el-icon-s-home"></i>返回首页</router-link></li>
-            <li><router-link to="/writeArticle" class="toggle-line"> <i class="el-icon-s-fold"></i> 更多文章</router-link>
+            <li>
+              <router-link to="/blog" class="toggle-line"
+                ><i class="el-icon-s-home"></i>返回首页</router-link
+              >
             </li>
-            <li><router-link to="/person" class="toggle-line"> <i class="el-icon-user"></i>个人中心</router-link></li>
-            <li><router-link to="/about" class="toggle-line"> <i class="el-icon-info"></i>关于博客</router-link></li>
-            <li><router-link to="/contact" class="toggle-line"> <i class="el-icon-s-promotion"></i>联系我们</router-link>
+            <li>
+              <router-link to="/more" class="toggle-line">
+                <i class="el-icon-s-fold"></i> 更多文章</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/person" class="toggle-line">
+                <i class="el-icon-user"></i>个人中心</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/about" class="toggle-line">
+                <i class="el-icon-info"></i>关于博客</router-link
+              >
+            </li>
+            <li>
+              <router-link to="/contact" class="toggle-line">
+                <i class="el-icon-s-promotion"></i>联系我们</router-link
+              >
             </li>
           </div>
         </div>
       </div>
-      <div style="z-index: 999!important;" class="drawer" :style="!isNight ? 'background-color: white' : ''">
+      <div
+        style="z-index: 999 !important"
+        class="drawer"
+        :style="!isNight ? 'background-color: white' : ''"
+      >
         <i @click="toClose">
           <quicklyBar id="quicklyBar2" v-if="starTrendering"></quicklyBar>
         </i>
@@ -56,16 +113,20 @@
     </header>
     <main>
       <!-- 快速导航栏 -->
-       <div style="flex: 1;">
-      <quicklyBar id="quicklyBar1" v-if="starTrendering">
-        <div class="mask"></div>
-      </quicklyBar>
-    </div>
+      <div style="flex: 1" id="quicklyBar1Parent">
+        <quicklyBar id="quicklyBar1" v-if="starTrendering">
+          <div class="mask"></div>
+        </quicklyBar>
+      </div>
       <!-- 文章内容 -->
-      <Article id="Article" :articleData="articleData" :style="isNight ? 'background-color: #222122' : ''"></Article>
+      <Article
+        id="Article"
+        :articleData="articleData"
+        :style="isNight ? 'background-color: #222122' : ''"
+      ></Article>
       <aside class="pc-aside-nav"></aside>
     </main>
-    <footer :class="['footer',{'dark-mode-footer': isNight}]">
+    <footer :class="['footer', { 'dark-mode-footer': isNight }]">
       <div class="container">
         <p class="footer-text">© 2024 秋风易冷</p>
       </div>
@@ -94,7 +155,10 @@ export default {
   },
   async created () {
     // console.log('进入articlePage组件')
-    await this.$store.dispatch('article/fetchArticleById', this.$route.query.id)
+    await this.$store.dispatch(
+      'article/fetchArticleById',
+      this.$route.query.id
+    )
   },
   computed: {
     ...mapGetters('article', ['getFullArticle']),
@@ -113,28 +177,30 @@ export default {
     }
   },
   watch: {
-
     drawer (stauts) {
       if (stauts) {
         document.querySelector('.drawer').classList.add('close')
         document.querySelector('html').style.overflow = 'hidden'
         if (this.rightClose) {
           setTimeout(() => {
-            document.querySelector('.navbar-mobile-container').style.transition = 'all 1s'
-            document.querySelector('.navbar-mobile-container').style.transform = 'translateX(100%)'
+            document.querySelector(
+              '.navbar-mobile-container'
+            ).style.transition = 'all 1s'
+            document.querySelector('.navbar-mobile-container').style.transform =
+              'translateX(100%)'
           }, 100)
         }
         return
       }
       document.querySelector('.drawer').classList.remove('close')
-      document.querySelector('html').style.overflow = 'auto'
+      document.querySelector('html').style.overflowY = 'auto'
     },
     rightClose (stauts) {
       if (!stauts) {
-        document.querySelector('html').style.overflow = 'hidden'
+        document.querySelector('html').style.overflowY = 'hidden'
         return
       }
-      document.querySelector('html').style.overflow = 'auto'
+      document.querySelector('html').style.overflowY = 'auto'
     },
     articleData (newValue) {
       this.starTrendering = newValue
@@ -167,23 +233,30 @@ export default {
     ifRightClose () {
       this.rightClose = !this.rightClose
       if (this.rightClose) {
-        document.querySelector('.navbar-mobile-container').style.transition = 'all 1s'
-        document.querySelector('.navbar-mobile-container').style.transform = 'translateX(100%)'
+        document.querySelector('.navbar-mobile-container').style.transition =
+          'all 1s'
+        document.querySelector('.navbar-mobile-container').style.transform =
+          'translateX(100%)'
         return
       }
       if (this.drawer) {
         this.drawer = false
       }
-      document.querySelector('.navbar-mobile-container').style.transition = 'all 0.5s'
-      document.querySelector('.navbar-mobile-container').style.transform = 'translateX(-100%)'
+      document.querySelector('.navbar-mobile-container').style.transition =
+        'all 0.5s'
+      document.querySelector('.navbar-mobile-container').style.transform =
+        'translateX(-100%)'
     }
   },
-  destroyed () {
-    // console.log('离开articlePage组件')
-    document.querySelector('html').style.overflow = 'auto'
-    this.$store.commit('article/setFullArticle', null)
-  },
+  // destroyed () {
+  //   // console.log('离开articlePage组件')
+  //   document.querySelector('html').style.overflowY = 'auto'
+  //   this.$store.commit('article/setFullArticle', null)
+  // },
   beforeRouteLeave (to, from, next) {
+    // console.log('离开articlePage组件')
+    document.querySelector('html').style.overflowY = 'auto'
+    this.$store.commit('article/setFullArticle', null)
     this.$store.commit('article/setChoose', null)
     next()
   }
@@ -236,13 +309,13 @@ export default {
 }
 
 .quicklyBarButton {
-  display: none
+  display: none;
 }
 
 #header {
   display: flex;
   align-items: center;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   top: -0.5vh;
   left: 0;
@@ -277,7 +350,7 @@ main {
 }
 .switch {
   margin-right: 4vw !important;
-  position: absolute;
+  position: relative;
   right: -10px;
   top: 50%;
   transform: translateY(-50%);
@@ -295,7 +368,6 @@ main {
 
 .nightMode {
   color: white !important;
-  ;
 }
 
 .slider {
@@ -306,7 +378,7 @@ main {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -317,14 +389,14 @@ main {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
 }
 
-input:checked+.slider {
+input:checked + .slider {
   background-color: #636668;
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   transform: translateX(26px);
 }
 
@@ -363,29 +435,33 @@ input:checked+.slider:before {
   text-align: center;
 }
 .navbar-mobile-container {
-  display: none
+  display: none;
 }
 .dark-mode-footer {
   background-color: #2a2a2a;
 }
-.el-icon-arrow-left{
+.el-icon-arrow-left {
   display: none;
 }
-@media screen and (max-width:600px) {
+@media screen and (max-width: 600px) {
   * {
     --height1: 8vh;
   }
 
   #header {
     left: 0;
+    width: 102vw;
     justify-content: space-between;
     background-color: #555;
   }
 
-  .el-icon-arrow-left{
-  display: block;
-}
+  .el-icon-arrow-left {
+    display: block;
+  }
   #quicklyBar1 {
+    display: none;
+  }
+  #quicklyBar1Parent{
     display: none;
   }
 
@@ -400,12 +476,13 @@ input:checked+.slider:before {
   }
 
   #Article {
+    margin: 0 auto;
     width: 90vw;
   }
 
   .quicklyBarButton {
-   position: absolute;
-   left: 2rem;
+    position: absolute;
+    left: 2rem;
     margin-left: 1vh;
     width: 2vw;
     height: 2vw;
@@ -482,9 +559,9 @@ input:checked+.slider:before {
   }
 
   .navbar-mobile-toggle {
-    width: 50%;
+    width: 49vw;
     height: 100%;
-    margin-top: -0.4vh;
+    margin-top: -0.5vh;
     background: #2a2a2a;
   }
 
@@ -515,12 +592,11 @@ input:checked+.slider:before {
   }
 }
 
-@media screen and (max-width:420px) {
+@media screen and (max-width: 420px) {
   .quicklyBarButton {
     width: 12vw;
     height: 7vw;
     font-size: 0.7rem;
   }
-
 }
 </style>

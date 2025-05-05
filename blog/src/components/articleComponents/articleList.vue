@@ -8,6 +8,7 @@
       <h3 class="article-title">
         {{ item.title }}
         <span style="margin-left:1rem;">
+          <br>
           <span style="font-size: medium;">类型:</span>
           <span
             style="font-size: small;"
@@ -87,5 +88,52 @@ export default {
   background-color: transparent;
   height: 100%;
   width: 100%;
+}
+@media screen and (max-width: 740px){
+  .article-card {
+  position: relative;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0.65rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(90, 88, 88, 0.1);
+  transition: all 0.1s ease;
+}
+.article-card:hover {
+  box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.article-card-night {
+  background-color: #2a2a2a;
+  box-shadow: 0 1px 3px rgb(182, 180, 180);
+}
+
+.article-card-night:hover {
+  box-shadow: 1 4px 6px rgb(182, 180, 180);
+}
+p{
+  margin-top:0.5em ;
+  margin-bottom: 0.5em ;
+}
+.article-title {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.article-excerpt {
+  font-size: 0.6em;
+  color: #666;
+}
+
+.Cardmark {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  height: 100%;
+  width: 100%;
+}
 }
 </style>

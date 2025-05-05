@@ -92,7 +92,7 @@ export default {
   top: 0;
   left: 0;
   z-index: 10;
-  width: 100vw;
+  width:100vw ;
   background-color: white;
   height: 10vh;
   display: flex;
@@ -278,5 +278,10 @@ input:checked+.slider:before {
   .goBack {
     display: none;
   }
+}
+@media screen and (max-width:600px){
+  .header {
+ width: 102vw;
+}
 }
 </style>

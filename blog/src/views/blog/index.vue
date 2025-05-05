@@ -17,25 +17,7 @@
                   <i class="el-icon-refresh" :class="{ 'refresh-active': IsRefresh }"></i>
                 刷新</span></h2>
               <div class="article-list">
-                <div v-for="item in getArticleList" :key="item.id"
-                  :class="{ 'article-card': true, 'article-card-night': isNight }">
-                  <h3 class="article-title"> {{ item.title }}
-                    <span style="margin-left:1rem;">
-                      <span style="font-size: medium;">类型:</span>
-                      <span style="font-size: small;" v-for="(tag, index) in (item.tags).split(',').map((item,index)=>{
-                        if(index>=1){
-                          return ' '+item
-                        }
-                        return item
-                      })"
-                        :key="(index)">{{ tag }}</span>
-                    </span>
-                  </h3>
-                  <p><span>作者:{{ item.author }}</span><span style="margin-left:1rem;">{{
-                    item.publishedDate.match(/^\d{4}-\d{2}-\d{2}/)[0] }}</span></p>
-                  <p class="article-excerpt">{{ item.content }}</p>
-                  <div @click="$router.push(`article?id=${item.id}`)" class="Cardmark"></div>
-                </div>
+                <articleList :articles="getArticleList"></articleList>
                 <!-- 分页 -->
                 <el-pagination :page-size="6" :pager-count="9" layout="prev, pager, next, jumper" :background="true"
                 style="margin-bottom: 1rem;"
@@ -84,6 +66,7 @@ import Clock from '@/components/clock.vue'
 import HomePersonComponent from '@/views/blog/home-Person.vue'
 import HeaderComponent from '@/components/header.vue'
 import FooterComponent from '@/components/footer.vue'
+import articleList from '@/components/articleComponents/articleList.vue'
 
 export default {
   name: 'BlogPage',
@@ -91,7 +74,8 @@ export default {
     Clock,
     HeaderComponent,
     FooterComponent,
-    HomePersonComponent
+    HomePersonComponent,
+    articleList
   },
   created () {
     this.$store.dispatch('article/fetchArticleList', this.currentPage)
@@ -220,7 +204,6 @@ h2 {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
 }
 
 .Cardmark {

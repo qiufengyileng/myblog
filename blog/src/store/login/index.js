@@ -1,6 +1,9 @@
+
 export default {
   namespaced: true,
+
   state: {
+
     visible: false
   },
   mutations: {
@@ -13,5 +16,8 @@ export default {
     loginOut ({ commit }) {
       commit('user/clearUserData', null, { root: true })
     }
+  },
+  getters: {
+  
   }
 }

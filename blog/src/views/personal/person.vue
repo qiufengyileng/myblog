@@ -57,7 +57,7 @@
   <!-- 124.220.12.190 -->
   <el-dialog title="更改头像" :visible.sync="dialogVisible" 
   center
-  width="30%">
+  :width="isMobile? '90%':'30%'">
     <el-upload
   class="avatar-uploader"
   action="http://124.220.12.190:3000/user/uploadAvatar"
@@ -76,7 +76,7 @@
   <el-dialog title="修改密码" :visible.sync="changePasswordDialog" 
   :close-on-click-modal="false"
   center
-  width="30%">
+  :width="isMobile? '90%':'30%'">
   <el-form :model="form" :rules="rules" ref="form" status-icon>
     <el-form-item label="旧密码" prop="oldPassword">
         <el-input v-model="form.oldPassword" :type="showPasswordFrom.oldPassword ? 'text' : 'password'" placeholder="请输入旧密码">
@@ -150,7 +150,7 @@ export default {
     }
   },
   computed: {
-    ...mapState('setting', ['isNight']),
+    ...mapState('setting', ['isNight', 'isMobile']),
     ...mapState('user', ['userData']),
     user () {
       return this.userData
@@ -465,4 +465,4 @@ input,textarea{
     margin-left: -17px;
   }
 }
-</style>import { map } from 'core-js/core/array'import { deleteProperty } from 'core-js/fn/reflect'import { check } from 'prettier'import { check } from 'prettier'
+</style>
