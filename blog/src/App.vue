@@ -47,24 +47,13 @@ function render (night) {
   --barwidth: 0px;
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-span,
-div {
-  word-break: break-all;
-  overflow-wrap: break-word;
-  white-space: normal;
-  text-overflow: ellipsis;
-}
 html {
   overflow: scroll;
   position: relative;
   overflow-x: hidden;
+}
+img{
+  max-width: 100%!important;
 }
 body {
   width: 100vw;

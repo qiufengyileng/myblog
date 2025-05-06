@@ -300,6 +300,20 @@ export default {
 </script>
 
 <style scoped>
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div {
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+  text-overflow: ellipsis;
+}
 article {
   padding: 2vw 4vw;
   margin-right: 2rem;

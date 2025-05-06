@@ -1,6 +1,5 @@
 import request from '@/utils/interceptor'
 import { setName, setToken } from '@/utils/storage'
-import store from '@/store/index'
 const checkIdentity = async (username, password) => {
 
   // console.log('验证身份接口被调用')
@@ -10,11 +9,8 @@ const checkIdentity = async (username, password) => {
   })
   if (indentity) {
     if (username) setName(username)
-    if (token) {
-      setToken(token)
-      store.commit('login/setToken', token)
-
-    }
+    if (token) setToken(token)
+    
   }
   console.log(mes, indentity)
   return indentity

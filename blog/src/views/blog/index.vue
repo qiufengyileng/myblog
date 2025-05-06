@@ -17,7 +17,7 @@
                   <i class="el-icon-refresh" :class="{ 'refresh-active': IsRefresh }"></i>
                 刷新</span></h2>
               <div class="article-list">
-                <articleList :articles="getArticleList"></articleList>
+                <articleList :articles="getArticleList" style="min-height:112vh"></articleList>
                 <!-- 分页 -->
                 <el-pagination :page-size="6" :pager-count="9" layout="prev, pager, next, jumper" :background="true"
                 style="margin-bottom: 1rem;"
@@ -111,7 +111,8 @@ export default {
       this.IsRefresh = true
       setTimeout(() => {
         this.IsRefresh = false
-      }, 1500)
+        this.$message.success('已是最新')
+      }, Math.random() * 1000)
     },
     scrollToTop () {
       const duration = window.innerHeight
@@ -133,6 +134,8 @@ export default {
     },
     handleCurrentChange (val) {
       // console.log('handleCurrentChange', val)
+      // 回到头部
+      window.scrollTo({ top: window.innerHeight })
       // 设置当前页码
       this.$store.commit('home/setCurrentPage', val)
       // 请求数据

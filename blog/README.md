@@ -42,3 +42,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### 5月1日
 修复了一些bug
+### 5月5日
+移动端适配的一些bug修复，和优化
+### 5月6日
+图片的展示问题，修复了图片超出页面的问题和一段英文超出页面的问题

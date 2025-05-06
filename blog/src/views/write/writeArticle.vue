@@ -1,7 +1,7 @@
 <template>
   <div class="editor-container">
     <div class="header">
-      <input type="text" class="title" placeholder="请输入文章标题..." v-model.trim="articleData.title">
+      <input type="text" class="title" placeholder="请输入文章标题..." v-model.trim="title">
       <div class="right">
         <!-- 标签选择 -->
         <el-dropdown trigger="click">
@@ -55,9 +55,6 @@ export default ({
         placeholder: '请输入内容...',
         image: {
         },
-        computed: {
-          
-        },
         MENU_CONF: {
           uploadImage: {
             customUpload: async (imageFile, insertImgFn) => {
@@ -108,6 +105,14 @@ export default ({
   computed: {
     avatar () {
       return this.$store.state.user.userData.avatar
+    },
+    title: {
+      get () {
+        return this.articleData.title
+      },
+      set (value) {
+        this.articleData.title = value
+      }
     }
   },
   watch: {
@@ -323,6 +328,7 @@ video {
 
   .header {
     height: 70px;
+    margin-top: 5px;
     padding-left: 50px;
     padding-right: 30px;
     display: flex;
@@ -332,7 +338,7 @@ video {
       color: inherit;
       border: none;
       outline: none;
-      width: 100%;
+      width: 80%;
       font-size: 22px;
     }
 
@@ -350,11 +356,12 @@ video {
 
       button {
         height: 38px;
-        aspect-ratio: 2 / 1;
+      aspect-ratio: 2 / 1;
       }
 
       .avatar {
         margin: 0 20px;
+       align-items: center;
         cursor: pointer;
         width: 60px;
         outline: 1px solid #ccc;

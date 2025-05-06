@@ -130,7 +130,7 @@ export default {
         if (indentity) {
           this.$message.success('登录成功')
           this.$store.commit('login/setVisible', false)
-
+          this.$router.go(0)
         } else {
           this.$message.error('登录失败')
         }

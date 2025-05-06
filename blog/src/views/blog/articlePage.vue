@@ -479,7 +479,6 @@ input:checked + .slider:before {
     margin: 0 auto;
     width: 90vw;
   }
-
   .quicklyBarButton {
     position: absolute;
     left: 2rem;
