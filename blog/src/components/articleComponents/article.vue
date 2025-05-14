@@ -314,6 +314,10 @@ div {
   white-space: normal;
   text-overflow: ellipsis;
 }
+h4 {
+  background-color: #fff!important;
+ color:red !important;
+}
 article {
   padding: 2vw 4vw;
   margin-right: 2rem;

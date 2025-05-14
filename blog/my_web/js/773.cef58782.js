@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkmy_web"]=self["webpackChunkmy_web"]||[]).push([[773],{24773:function(t,e,n){n.r(e),n.d(e,{default:function(){return i}});var r=function(){var t=this,e=t._self._c;return e("div",{staticClass:"container"},[e("h2",[t._v("这里暂时还是一片空白!!!")]),e("router-link",{attrs:{to:"/blog",id:"goBack"}},[t._v(" 返回首页 ")])],1)},u=[],a={name:"404Page"},s=a,l=n(81656),c=(0,l.A)(s,r,u,!1,null,"0008694b",null),i=c.exports}}]);
+//# sourceMappingURL=773.cef58782.js.map

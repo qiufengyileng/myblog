@@ -42,7 +42,88 @@ const app = new Vue({
   store,
   render: h => h(App)
 })
-Vue.prototype.$message = Message
+
+// Vue.prototype.$message = Message
+
+// 单例消息
+let _message 
+{
+  let messageInstance = null
+  // 清除实例
+  const clear = () => {
+    if (messageInstance) {
+      messageInstance.close()
+    }
+  }
+  _message = (Vue.prototype.$message = function (options) {
+    // 如果已经存在一个消息实例，则关闭它
+    clear()
+    // 创建新的消息实例并保存到变量中
+    messageInstance = Message(options)
+    return messageInstance
+    
+  })
+  // error
+  Vue.prototype.$message.error = (options) => {
+    clear()
+    messageInstance = Message.error(options)
+    return messageInstance
+  }
+  // success
+  Vue.prototype.$message.success = (options) => {
+    clear()
+    messageInstance = Message.success(options)
+    return messageInstance
+  }
+  // warning
+  Vue.prototype.$message.warning = (options) => {
+    clear()
+    messageInstance = Message.warning(options)
+    return messageInstance
+  }
+}
+// 只会触发一次的message
+const onceMessage = {}
+Vue.prototype.$onceMessage = (options, name) => {
+  // 已经触发了,就不再触发
+  if (onceMessage[name]) {
+    return
+  } else {
+    onceMessage[name] = true
+  }
+  return _message(options)
+}
+// error
+Vue.prototype.$onceMessage.error = (options, name) => {
+  // 已经触发了,就不再触发
+  if (onceMessage[name]) {
+    return
+  } else {
+    onceMessage[name] = true
+  }
+  return _message.error(options)
+}
+// success
+Vue.prototype.$onceMessage.success = (options, name) => {
+  // 已经触发了,就不再触发
+  if (onceMessage[name]) {
+    return
+  } else {
+    onceMessage[name] = true
+  }
+  return _message.success(options)
+}
+// warning
+Vue.prototype.$onceMessage.warning = (options, name) => {
+  // 已经触发了,就不再触发
+  if (onceMessage[name]) {
+    return
+  } else {
+    onceMessage[name] = true
+  }
+  return _message.warning(options)
+}
+
 // 获取页面的宽度
 const viewportWidth = window.innerWidth || document.documentElement.clientWidth
 // 是否为移动端
@@ -55,3 +136,4 @@ if (viewportWidth < 768) {
   store.commit('setting/setMobile', true)
 }
 app.$mount('#app')
+export default _message

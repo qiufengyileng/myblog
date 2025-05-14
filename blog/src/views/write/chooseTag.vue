@@ -45,7 +45,10 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-
+    clearTags () {
+      this.dynamicTags = []
+      this.$emit('update:dynamicTags', this.dynamicTags)
+    },
     handleInputConfirm () {
       const inputValue = this.inputValue
       if (this.dynamicTags.length > 5) {

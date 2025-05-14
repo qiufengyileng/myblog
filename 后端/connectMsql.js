@@ -58,7 +58,7 @@ pool.on('error', (err) => {
   console.error('连接池错误：', err)
 })
 
-function handleDataFromDB(sql, type) {
+function handleDataFromDB2(sql, type, values = []) {
   return new Promise((resolve, reject) => {
     pool.getConnection((err, connection) => {
       if (err) {
@@ -67,7 +67,8 @@ function handleDataFromDB(sql, type) {
         return
       }
 
-      connection.query(sql, (error, result) => {
+      // 使用参数化查询
+      connection.query(sql, values, (error, result) => {
         // 查询完成后释放连接回连接池
         connection.release()
         
@@ -82,6 +83,7 @@ function handleDataFromDB(sql, type) {
     })
   })
 }
+
 function closePool() {
   return new Promise((resolve, reject) => {
     pool.end(err => {
@@ -96,4 +98,4 @@ function closePool() {
   })
 }
 
-export  { handleDataFromDB, closePool }
+export  { closePool,handleDataFromDB2 }

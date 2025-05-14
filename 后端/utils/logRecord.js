@@ -4,7 +4,7 @@ import path from 'path'
 
 // 获取文件的绝对路径
 const __filename = fileURLToPath(import.meta.url)
-// console.log(__filename)
+console.log(__filename)
 // 获取文件目录的绝对路径
 const __dirname = path.dirname(__filename)
 // console.log(__dirname)

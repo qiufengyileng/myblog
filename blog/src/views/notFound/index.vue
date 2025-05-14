@@ -1,7 +1,9 @@
 <template>
   <div class="container">
-    <h2>404!!!</h2>
-    <router-link to="/blog" id="goBack">返回首页</router-link>
+    <h2>这里暂时还是一片空白!!!</h2>
+    <router-link to="/blog" id="goBack">
+      返回首页
+    </router-link>
   </div>
 </template>
 
@@ -39,6 +41,7 @@ h2 {
   border: 1px solid #000;
   border-radius: 5px;
   cursor: pointer;
+  outline: 1px solid #ffffff;
   transition: all .5s;
   text-decoration: none;
   font-size: 16px;

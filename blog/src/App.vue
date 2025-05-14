@@ -17,11 +17,15 @@ export default {
     LoginComponent
   },
   computed: {
-    ...mapState('setting', ['isNight'])
+    ...mapState('setting', ['isNight']),
+    ...mapState('user', ['token'])
   },
   created () {
     render(this.isNight)
-    this.$store.dispatch('user/fetchPersonalCenterData')
+    // 如果有token,则获取个人中心数据,看一下是否符合规范
+    if (this.token && this.token !== '') {
+      this.$store.dispatch('user/fetchPersonalCenterData')
+    }
   },
   mounted () {
     // console.log('mounted', document.querySelector('.el-message'))
@@ -54,6 +58,7 @@ html {
 }
 img{
   max-width: 100%!important;
+  object-fit:contain;
 }
 body {
   width: 100vw;

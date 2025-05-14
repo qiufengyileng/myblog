@@ -7,10 +7,7 @@ import store from '@/store'
 import Nprogress from 'nprogress'
 // 引入进度条样式
 import 'nprogress/nprogress.css'
-// import store from '@/store'
-// import { mapGetters } from 'vuex'
 // 只能在组件中使用
-import { checkIdentity } from '@/api/identity.js'
 
 // 隐藏小圆圈加载效果
 Nprogress.configure({ showSpinner: false })
@@ -63,42 +60,36 @@ const router = new VueRouter({
   }
 
 })
-const pass = async () => {
-  const pass = await checkIdentity()
-  // console.log('pass', pass)
-  // 直接token判断
-  return pass
-}// 判断是否已经通过
 const pathList = ['/personalCenter', '/writeArticle']
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   // console.log('跳转', to.path)
   // 进度条开始
   Nprogress.start()
-  try {
-    // 关闭之前的错误消息
-    if (messageHandle) {
-      messageHandle.close()
-    }
-    if (pathList.includes(to.path) && await pass() === false) {
-      next(from.path)
-      store.commit('login/setVisible', true)
-      messageHandle = Message({
-        message: '请先登录',
-        type: 'error',
-        duration: 1000
-      })
-      Nprogress.done()
-      return
-    }// 判断是否已经登录，没有登录则跳转到登录界面
-    // console.log('跳转', to.path, '成功')
-    next()
-  } catch (error) {
-    // console.log('跳转', to.path, '失败')
-    next()
+  // 关闭之前的错误消息
+  if (messageHandle) {
+    messageHandle.close()
   }
+  // 判断是否需要登录，如果需要登录则跳转到登录界面
+  // 有没有token，不判断是否过期，在拦截器里面有判断是否过期
+  // 如果过期，会将token置空，然后跳转到登录界面，所以这里不需要判断是否过期
+  
+  if (pathList.includes(to.path) && (!store.state.user.token || store.state.user.token === '')) {
+    next(from.path + '?redirect=' + to.path)
+    store.commit('login/setVisible', true)
+    messageHandle = Message({
+      message: '请先登录',
+      type: 'error',
+      duration: 1000
+    })
+    Nprogress.done()
+    return
+  }// 判断是否已经登录，没有登录则跳转到登录界面
+  // console.log('跳转', to.path, '成功')
+  next()
+
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
   // 进度条结束
   Nprogress.done()
 })

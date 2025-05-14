@@ -1,85 +1,49 @@
 import express from 'express'
-import { handleDataFromDB } from '../../connectMsql.js'
-import Token from '../../createToken.js'
+import { handleDataFromDB2 } from '../../connectMsql.js'
 import multer from 'multer'
+import {UserDto} from '../../class/User.js'
+import {creatToken } from '../../utils/JwtUtils.js'
+import userInterceptor from './userInterceptor.js'
 
 const upload = multer({ storage: multer.memoryStorage() })
 
 
 const router = express.Router()
-const defaultData = {}
 
-// 中间件：验证token
-function tokenIdentity(req, res, next) {
-  console.log('tokenIdentity')
-  const token = req.headers.authorization
-  console.log('token=>', token)
-  const sql = `select time_before from login_user where token='${token}'`
-  handleDataFromDB(sql, 'select').then(data => {
-    const timeBefore = JSON.parse(data)[0].time_before
-    console.log(timeBefore)
-    const currentTime = new Date().getTime()
-    if (currentTime - timeBefore > 100000000 * 60 * 60 * 24 * 7) {
-      console.log('token过期')
-      next()
-    } else {
-      res.send({ mes: 'token验证成功', indentity: true })
-    }
-  }).catch(() => { console.log('token验证失败+null'); next() })
-}
+// 中间件：用户身份验证
+router.use(userInterceptor)
+//游客模式
 
-// 中间件：通过token来获取用户ID
-function getUserId(req, res, next) {
-  defaultData.userId = null
-  const token = req.headers.authorization
-  const sql = `select user_id from login_user where token='${token}'`
-  handleDataFromDB(sql, 'select').then((data) => {
-    console.log('getUserId', data)
-    defaultData.userId = JSON.parse(data)[0].user_id
-    next()
-  }).catch(() => {
-    res.send({ mes: '没有找到相应用户' })
-  })
-}
-
-// POST /user/identity - 用户身份验证
-router.post('/identity', tokenIdentity, (req, res) => {
+// POST /user/login - 用户身份验证
+router.post('/login', (req, res) => {
   const { username, password } = req.body
-  const sql = `SELECT COUNT(*) FROM login_user WHERE user_name = '${username}' AND password = '${password}'`
-  handleDataFromDB(sql, 'select').then(data => {
-    if (JSON.parse(data)[0]['COUNT(*)'] === 1) {
-      const token = Token(username)
-      console.log(username, password)
+  const value1=[username,password]
+  const sql1 = `SELECT user_id FROM login_user WHERE user_name = ? AND password = ?`
+  handleDataFromDB2(sql1, 'select',value1).then(data => {
+    //查到了数据
+    if (JSON.parse(data)[0]&&JSON.parse(data)[0].user_id) {
+      // 生成token
+      const userDto = new UserDto(username,JSON.parse(data)[0].user_id)
+      const token=creatToken(userDto)
       console.log('token生成' + token)
-
-      const sql = `UPDATE login_user 
-        SET token='${token}', 
-        time_before='${+new Date()}' 
-        WHERE user_name='${username}' and password='${password}'`
-
-      handleDataFromDB(sql, 'update')
-        .then(() => {
-          console.log('token更新成功' + token + '\\时间：' + '' + new Date())
-          res.send({ mes: 'success', username, indentity: true, token: token })
-        })
-        .catch(() => {
-          console.log('token更新失败' + token + '\\时间：' + '' + new Date())
-          res.send({ mes: 'token更新失败', indentity: false })
-        })
-    } else {
-      res.send({ mes: 'success', indentity: false })
-    }
-  }).catch(() => {
-    res.send({ mes: '服务器内部故障', indentity: false })
-  })
+      res.send({ mes: 'success', username, indentity: true, token: token })
+  }
+  //没查到数据 
+  else {
+    res.send({ mes: '用户名或密码错误', indentity: false })
+  }
 })
-
+//数据库错误
+.catch(() => { res.send({ mes: '服务器内部故障', indentity: false }) })
+})
 // GET /user/personal - 获取个人中心数据
-router.get('/personal', getUserId, (req, res) => {
-  const { userId } = defaultData
+router.get('/personal',(req, res) => {
+ //获取userId
+  const userId=req.tokenData.userId
   console.log('userId', userId)
-  const sql = `select * from user_personal_center where user_id='${userId}'`
-  handleDataFromDB(sql, 'select').then((data) => {
+  const values=[userId]
+  const sql = `select * from user_personal_center where user_id=?`
+  handleDataFromDB2(sql, 'select',values).then((data) => {
     console.log('个人中心请求成功')
     console.log('personalCenter', data)
     res.send(data)
@@ -90,11 +54,16 @@ router.get('/personal', getUserId, (req, res) => {
 })
 
 // POST /user/personal - 修改个人资料
-router.post('/personal', getUserId, (req, res) => {
-  const { userId } = defaultData
+router.post('/personal', (req, res) => {
+  //游客
+  if(req.tokenData.username==='游客账号'){
+    return res.status(666).send({ mes: '游客模式下,个人资料修改成功,但是并不会被保存' })
+  }
+  const userId=req.tokenData.userId
   const { introduction, email, public_email: publicEmail, public_tel: publicTel, userName } = req.body
-  const sql = `update user_personal_center set introduction='${introduction}',email='${email}',public_email='${publicEmail}',public_tel='${publicTel}',userName='${userName}' where user_id='${userId}'`
-  handleDataFromDB(sql, 'update').then(() => {
+  const values=[introduction, email, publicEmail, publicTel, userName, userId]
+  const sql = `update user_personal_center set introduction=?,email=?,public_email=?,public_tel=?,userName=? where user_id=?`
+  handleDataFromDB2(sql, 'update',values).then(() => {
     console.log('changePersonData', 'success')
     res.send({ mes: 'success' })
   }).catch((error) => {
@@ -104,22 +73,26 @@ router.post('/personal', getUserId, (req, res) => {
 })
 
 // POST /user/upload - 上传头像
-router.post('/uploadAvatar', getUserId, upload.single('avatar'), (req, res) => {
+router.post('/uploadAvatar', upload.single('avatar'), (req, res) => {
+  //游客
+  if(req.tokenData.username==='游客账号'){
+    return res.status(666).send({ mes: '游客模式下,个人资料修改成功,但是并不会被保存' })
+  }
 
   if (!req.file) {
-    return res.status(400).send({ 
-      success: false, 
-      message: '没有收到文件' 
+    return res.status(400).send({
+      success: false,
+      message: '没有收到文件'
     })
   }
-  const { userId } = defaultData
-
+  const userId=req.tokenData.userId
   // 将文件转换为 Base64 字符串
   const fileData = req.file.buffer.toString('base64')
   const avatarBase64 = `data:${req.file.mimetype};base64,${fileData}`
   console.log('avatarBase64', avatarBase64)
-  const sql = `update user_personal_center set avatar ='${avatarBase64}' where user_id='${userId}'`
-  handleDataFromDB(sql, 'update').then(() => {
+  const values=[avatarBase64, userId]
+  const sql = `update user_personal_center set avatar =? where user_id=?`
+  handleDataFromDB2(sql, 'update',values).then(() => {
     console.log('uploadImg', 'success')
     res.send({
       success: true,
@@ -132,14 +105,21 @@ router.post('/uploadAvatar', getUserId, upload.single('avatar'), (req, res) => {
 })
 
 // POST /user/updataPassword - 修改密码
-router.post('/updataPassword', getUserId, (req, res) => {
-  const { userId } = defaultData
+router.post('/updataPassword',(req, res) => {
+  //游客
+  if(req.tokenData.username==='游客账号'){
+    return res.status(666).send({ mes: '游客模式下,个人资料修改成功,但是并不会被保存' })
+  }
+  const userId=req.tokenData.userId
   const { oldPassword, newPassword } = req.body
-  const sql = `select password from login_user where user_id='${userId}'`
-  handleDataFromDB(sql, 'select').then((data) => {
+  console.log(oldPassword,newPassword)
+  const value1=[userId]
+  const sql1 = `select password from login_user where user_id=?`
+  handleDataFromDB2(sql1, 'select',value1).then((data) => {
     if (JSON.parse(data)[0].password === oldPassword) {
-      const sql = `update login_user set password='${newPassword}' where user_id='${userId}'`
-      handleDataFromDB(sql, 'update').then(() => {
+      const value2=[newPassword, userId]
+      const sql2 = `update login_user set password=? where user_id=?`
+      handleDataFromDB2(sql2, 'update',value2).then(() => {
         console.log('updataPassword', 'success')
         res.send({ message: 'success' })
       }).catch((error) => {

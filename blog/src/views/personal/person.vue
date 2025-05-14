@@ -1,112 +1,111 @@
 <template>
   <div>
     <Header style="height:10vh"></Header>
-  <div class="personal-center" style="padding-top: 10vh;">
-    <header class="header">
-      <h1>个人中心</h1>
-    </header>
-    <div :class="['content',{'nightMode':isNight}]">
-      <div class="profile-section">
-        <div class="avatar-container">
-          <img :src="user.avatar" :alt="user.userName" class="avatar">
-          <button @click="changeAvatar" class="change-avatar-btn">更换头像</button>
-        </div>
-        <div class="info-container">
-          <div class="info-item">
-            <label>用户名：</label>
-            <input v-model="user.userName"  type="text">
+    <div class="personal-center" style="padding-top: 10vh;">
+      <header class="header">
+        <h1>个人中心</h1>
+      </header>
+      <div :class="['content', { 'nightMode': isNight }]">
+        <div class="profile-section">
+          <div class="avatar-container">
+            <img :src="user.avatar" :alt="user.userName" class="avatar">
+            <button @click="changeAvatar" class="change-avatar-btn">更换头像</button>
           </div>
-          <div class="info-item">
-            <label>邮箱：</label>
-            <input v-model="user.email" type="email">
+          <div class="info-container">
+            <div class="info-item">
+              <label>用户名：</label>
+              <input v-model="user.userName" type="text">
+            </div>
+            <div class="info-item">
+              <label>邮箱：</label>
+              <input v-model="user.email" type="email">
+            </div>
+            <div class="info-item">
+              <label>电话：</label>
+              <input v-model="user.tel" type="tel">
+            </div>
+            <div class="info-item">
+              <label>职业：</label>
+              <input v-model="user.profession" type="pro">
+            </div>
           </div>
-          <div class="info-item">
-            <label>电话：</label>
-            <input v-model="user.tel" type="tel">
+        </div>
+        <div class="bio-section">
+          <h2>个人简介</h2>
+          <textarea v-model="user.introduction" rows="4" style="min-width: 100%;max-width: 100%;"></textarea>
+        </div>
+        <div class="privacy-section">
+          <h2>隐私设置</h2>
+          <div class="privacy-item">
+            <label>
+              <input type="checkbox" v-model="user.public_email"> 公开邮箱
+            </label>
+          </div>
+          <div class="privacy-item">
+            <label>
+              <input type="checkbox" v-model="user.public_tel"> 公开电话
+            </label>
           </div>
         </div>
-      </div>
-      <div class="bio-section">
-        <h2>个人简介</h2>
-        <textarea v-model="user.introduction" rows="4" style="min-width: 100%;max-width: 100%;"></textarea>
-      </div>
-      <div class="privacy-section">
-        <h2>隐私设置</h2>
-        <div class="privacy-item">
-          <label>
-            <input type="checkbox" v-model="user.public_email"> 公开邮箱
-          </label>
+        <div class="account-section">
+          <h2>账户安全</h2>
+          <button @click="changePasswordDialog = true" class="change-password-btn">修改密码</button>
         </div>
-        <div class="privacy-item">
-          <label>
-            <input type="checkbox" v-model="user.public_tel"> 公开电话
-          </label>
+        <div class="actions">
+          <button @click="saveChanges" class="save-btn">保存更改</button>
         </div>
       </div>
-      <div class="account-section">
-        <h2>账户安全</h2>
-        <button @click="changePasswordDialog = true" class="change-password-btn">修改密码</button>
-      </div>
-      <div class="actions">
-        <button @click="saveChanges" class="save-btn">保存更改</button>
-      </div>
+
     </div>
-  
+    <!-- 更改头像弹框 -->
+    <!-- 124.220.12.190 -->
+    <el-dialog title="更改头像" :visible.sync="dialogVisible" center :width="isMobile ? '90%' : '30%'">
+      <el-upload class="avatar-uploader" action="http://124.220.12.190:3000/user/uploadAvatar" :show-file-list="false"
+        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+        <img v-if="imageUrl" :src="imageUrl" class="_avatar">
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <div id="buttons" style='padding-top: 1rem;' @click.stop>
+          <el-button type="primary" @click="chooseAvatar">选定</el-button>
+          <el-button @click="cancel">取消</el-button>
+        </div>
+      </el-upload>
+    </el-dialog>
+    <!-- 修改密码弹框 -->
+    <el-dialog title="修改密码" :visible.sync="changePasswordDialog" :close-on-click-modal="false" center
+      :width="isMobile ? '90%' : '30%'">
+      <el-form :model="form" :rules="rules" ref="form" status-icon>
+        <el-form-item label="旧密码" prop="oldPassword">
+          <el-input v-model="form.oldPassword" :type="showPasswordFrom.oldPassword ? 'text' : 'password'"
+            placeholder="请输入旧密码">
+            <template #append>
+              <i :class="showPasswordFrom.oldPassword ? 'el-icon-view' : 'el-icon-lock'"
+                @click="showPasswordFrom.oldPassword = !showPasswordFrom.oldPassword"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input v-model="form.newPassword" :type="showPasswordFrom.newPassword ? 'text' : 'password'"
+            placeholder="请输入新密码">
+            <template #append>
+              <i :class="showPasswordFrom.newPassword ? 'el-icon-view' : 'el-icon-lock'"
+                @click="showPasswordFrom.newPassword = !showPasswordFrom.newPassword"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="confirmPassword">
+          <el-input v-model="form.confirmPassword" :type="showPasswordFrom.confirmPassword ? 'text' : 'password'"
+            placeholder="请确认新密码">
+            <template #append>
+              <i :class="showPasswordFrom.confirmPassword ? 'el-icon-view' : 'el-icon-lock'"
+                @click="showPasswordFrom.confirmPassword = !showPasswordFrom.confirmPassword"></i>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
+        <el-button @click="unsubmit('form')">取消</el-button>
+      </el-form>
+    </el-dialog>
   </div>
-  <!-- 更改头像弹框 -->
-  <!-- 124.220.12.190 -->
-  <el-dialog title="更改头像" :visible.sync="dialogVisible" 
-  center
-  :width="isMobile? '90%':'30%'">
-    <el-upload
-  class="avatar-uploader"
-  action="http://124.220.12.190:3000/user/uploadAvatar"
-  :show-file-list="false"
-  :on-success="handleAvatarSuccess"
-  :before-upload="beforeAvatarUpload">
-  <img v-if="imageUrl" :src="imageUrl" class="_avatar">
-  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-  <div id="buttons" style='padding-top: 1rem;' @click.stop>
-<el-button type="primary" @click="chooseAvatar" >选定</el-button>
-<el-button  @click="cancel">取消</el-button>
-</div>
-</el-upload>
-  </el-dialog>
-  <!-- 修改密码弹框 -->
-  <el-dialog title="修改密码" :visible.sync="changePasswordDialog" 
-  :close-on-click-modal="false"
-  center
-  :width="isMobile? '90%':'30%'">
-  <el-form :model="form" :rules="rules" ref="form" status-icon>
-    <el-form-item label="旧密码" prop="oldPassword">
-        <el-input v-model="form.oldPassword" :type="showPasswordFrom.oldPassword ? 'text' : 'password'" placeholder="请输入旧密码">
-      <template #append>
-        <i :class="showPasswordFrom.oldPassword ? 'el-icon-view' : 'el-icon-lock'" 
-        @click="showPasswordFrom.oldPassword = !showPasswordFrom.oldPassword"></i>
-      </template>
-    </el-input>
-    </el-form-item>
-    <el-form-item label="新密码" prop="newPassword">
-      <el-input v-model="form.newPassword" :type="showPasswordFrom.newPassword ? 'text' : 'password'" placeholder="请输入新密码">
-      <template #append>
-        <i :class="showPasswordFrom.newPassword ? 'el-icon-view' : 'el-icon-lock'" 
-        @click="showPasswordFrom.newPassword = !showPasswordFrom.newPassword"></i>
-      </template>
-    </el-input>
-    </el-form-item>
-    <el-form-item label="确认密码" prop="confirmPassword">
-    <el-input v-model="form.confirmPassword" :type="showPasswordFrom.confirmPassword ? 'text' : 'password'" placeholder="请确认新密码">
-      <template #append>
-        <i :class="showPasswordFrom.confirmPassword ? 'el-icon-view' : 'el-icon-lock'" 
-        @click="showPasswordFrom.confirmPassword = !showPasswordFrom.confirmPassword"></i>
-      </template>
-    </el-input>
-    </el-form-item>
-    <el-button type="primary" @click="submitForm('form')">提交</el-button>
-    <el-button @click="unsubmit('form')">取消</el-button>
-  </el-form>
-  </el-dialog>
-</div>
 </template>
 
 <script>
@@ -120,6 +119,12 @@ export default {
     Header
   },
   created () {
+    if (this.$store.state.user.username === '游客账号') {
+      this.$onceMessage.warning({
+        message: '游客模式下无法对个人中心的信息进行更改',
+        duration: 2000
+      }, 'personalCenter')
+    }
     if (!this.userData) {
       this.$store.dispatch('user/fetchPersonalCenterData')
     }
@@ -128,6 +133,7 @@ export default {
   },
   data () {
     return {
+      uploadedFile: null,
       chageData: null,
       dialogVisible: false,
       imageUrl: '',
@@ -182,26 +188,36 @@ export default {
       this.$store.dispatch('user/fetchSaveUserData', this.chageData)
     },
     handleAvatarSuccess (res, file) {
-      // 要上传的文件 
-      this.uploadedFile = file.raw
+      // console.log('handleAvatarSuccess', res, file)
+    },
+    // 回显
+    showImg (file) {
+      console.log('file', file)
+      this.uploadedFile = file
       // 预览的图片
-      this.imageUrl = URL.createObjectURL(file.raw)
+      this.imageUrl = URL.createObjectURL(file)
     },
     // 选定头像
     async chooseAvatar () {
+      if (!this.uploadedFile) {
+        this.$message.warning('请先选择头像')
+        return
+      }
       try {
-      // 创建 FormData 对象来发送文件
+        // 创建 FormData 对象来发送文件
         const formData = new FormData()
+        console.log('this.uploadedFile', this.uploadedFile)
         formData.append('avatar', this.uploadedFile)
 
         // 发送请求到后端
         const response = await uploadAvatar(formData)
 
         if (response.success) {
-        // 更新本地头像URL
+          // 更新本地头像URL
           this.$store.commit('user/setUserAvatar', response.avatarUrl)
           this.$message.success('头像更新成功')
           this.imageUrl = ''
+          this.uploadedFile = null
         } else {
           this.$message.error('头像更新失败')
         }
@@ -218,15 +234,18 @@ export default {
 
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
+      } else if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
+      } else {
+        this.showImg(file)
       }
+      
       return isJPG && isLt2M
     },
     // 取消
     cancel () {
       this.imageUrl = ''
+      this.uploadedFile = null
       this.dialogVisible = false
     },
     // 选定
@@ -307,37 +326,41 @@ export default {
 }
 
 .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-  .avatar-uploader{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    border-radius: 1rem;
-    border: 1px dotted #d9d9d9;
-    line-height: 178px;
-    text-align: center;
-  }
-  ._avatar {
-    width: 200px;
-    max-height: 400px;
-    object-fit: cover;
-    display: block;
-  }
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar-uploader {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  border-radius: 1rem;
+  border: 1px dotted #d9d9d9;
+  line-height: 178px;
+  text-align: center;
+}
+
+._avatar {
+  width: 200px;
+  max-height: 400px;
+  object-fit: cover;
+  display: block;
+}
 
 .header {
   text-align: center;
@@ -345,7 +368,7 @@ export default {
 }
 
 .header h1 {
-  color:inherit;
+  color: inherit;
 }
 
 .content {
@@ -354,10 +377,12 @@ export default {
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-.nightMode{
+
+.nightMode {
   background-color: #6e6b6b3d;
   border-color: black;
 }
+
 .profile-section {
   display: flex;
   margin-bottom: 30px;
@@ -367,10 +392,15 @@ export default {
   flex: 0 0 200px;
   text-align: center;
 }
-input,textarea{
-  background-color: inherit!important;;
-  color: inherit!important;;
+
+input,
+textarea {
+  background-color: inherit !important;
+  ;
+  color: inherit !important;
+  ;
 }
+
 .avatar {
   width: 150px;
   height: 150px;
@@ -381,7 +411,7 @@ input,textarea{
 
 .change-avatar-btn {
   background-color: #4CAF50;
-  color:inherit;
+  color: inherit;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
@@ -399,7 +429,7 @@ input,textarea{
 .info-item label {
   display: block;
   margin-bottom: 5px;
-  color:inherit;
+  color: inherit;
 }
 
 .info-item input {
@@ -409,7 +439,9 @@ input,textarea{
   border-radius: 4px;
 }
 
-.bio-section, .privacy-section, .account-section {
+.bio-section,
+.privacy-section,
+.account-section {
   margin-bottom: 30px;
 }
 
@@ -447,21 +479,25 @@ input,textarea{
   font-size: 16px;
 }
 
-.save-btn:hover
-, .change-avatar-btn:hover, .change-password-btn:hover {
+.save-btn:hover,
+.change-avatar-btn:hover,
+.change-password-btn:hover {
   opacity: 0.8;
 }
-@media screen and (max-width: 490px){
-  .avatar-container{
+
+@media screen and (max-width: 490px) {
+  .avatar-container {
     flex: 0 0 100px;
     text-align: center;
   }
-  .avatar{
+
+  .avatar {
     width: 80px;
     height: 80px;
     margin-left: -10px;
   }
-  .change-avatar-btn{
+
+  .change-avatar-btn {
     margin-left: -17px;
   }
 }

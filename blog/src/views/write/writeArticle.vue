@@ -28,7 +28,6 @@
 <script>
 
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-// import { DomEditor } from '@wangeditor/editor'
 import { fetchSaveArticle } from '@/api/article'
 import dayjs from 'dayjs'
 import ChooseTag from '@/views/write/chooseTag.vue'
@@ -37,6 +36,12 @@ import '@wangeditor/editor/dist/css/style.css'
 export default ({
   components: { Editor, Toolbar, ChooseTag },
   created () {
+    if (this.$store.state.user.username === '游客账号') {
+      this.$onceMessage.warning({
+        message: '游客模式下上传的文章是不会被保存的哦!',
+        duration: 2500
+      }, 'writePage')
+    }
     this.articleData = { ...this.$store.state.write.articleData }
     // console.log('articleData', this.articleData)
     this.saveArticleDisabled = this.$store.state.write.saveArticleDisabled
@@ -66,7 +71,6 @@ export default ({
               }
 
               try {
-                // 压缩图片
                 const compressedFile = await this.compressImage(imageFile)
                 const reader = new FileReader()
                 reader.onload = (e) => {
@@ -118,7 +122,8 @@ export default ({
   watch: {
     title: {
       handler (newValue, oldValue) {
-        if (newValue.trim().length > 50) {
+        // console.log('title', newValue, oldValue)
+        if (newValue?.trim().length > 50) {
           this.$message.warning('标题过长')
           this.title = oldValue
         }
@@ -205,7 +210,11 @@ export default ({
           author: this.$store.state.user.username
         })
         if (res.message === 'ok') {
-          this.$message.success('上传成功')
+          if (!res.but) {
+            this.$message.success('上传成功')
+          } else {
+            this.$message.warning(res.but)
+          }
           // 保存成功后，禁用可写模式
           // this.editor.disable()
           // toolbar不可见
@@ -218,19 +227,27 @@ export default ({
           this.$store.commit('write/cleararticleData')
           // 清空编辑器，title和标签中的数据
           this.editor.clear()
-          this.articleData = {}
-          this.$refs.chooseTag._data.dynamicTags = [] // 清空标签
-          // console.log(this.$refs.chooseTag, 'this.$refs.chooseTag.clearTags())')  
+          this.deleteArticleData()
+    
+          this.$refs.chooseTag.clearTags()
         } else {
+          if (res.message === '文章上传成功,但是并不会被保存') {
+            return
+          }
           if (res.message === '超过最大文章数，添加文章失败') {
             this.$message.error('每日限制3篇文章,请明天再试')
             return
           }
-          this.$message.error('上传成功')
+          this.$message.error('上传失败')
         }
 
       } catch (error) {
         // console.log('error', error)
+      }
+    },
+    deleteArticleData () {
+      for (const key in this.articleData) {
+        this.articleData[key] = ''
       }
     },
     saveDraft () {
@@ -322,9 +339,8 @@ video {
 .editor-container {
  min-height: 100vh;
   width: 100%;
-  margin-top:-8px;
+  margin-top:-5px;
   background: #fff;
-  margin-left: -7px;
 
   .header {
     height: 70px;
@@ -335,7 +351,7 @@ video {
     justify-content: space-between;
 
     .title {
-      color: inherit;
+      // color: inherit;
       border: none;
       outline: none;
       width: 80%;
@@ -364,6 +380,7 @@ video {
        align-items: center;
         cursor: pointer;
         width: 60px;
+        object-fit: cover;
         outline: 1px solid #ccc;
         aspect-ratio: 1/1;
         border-radius: 50%;

@@ -1,31 +1,25 @@
 <template>
   <div>
-   <el-dialog :visible="visible"
-    title="登录"
-    :width="isMobile? '90%':'30%'"
-    :before-close="handleClose"
-    :append-to-body="true">
-<el-form :model="form"
- v-loading="loading"
- ref="loginForm"
- element-loading-text="登录中..."
-:rules="formRules" status-icon>
-  <el-form-item label="用户名" prop="username">
-    <el-input v-model="form.username" placeholder="请输入用户名" />
-  </el-form-item>
-  <el-form-item label="密码" prop="password">
-    <el-input v-model="form.password" placeholder="请输入密码" />
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="handleLogin" :disabled="buttonDisabled">登录</el-button>
-  </el-form-item>
-</el-form>
-   </el-dialog>
+    <el-dialog :visible="visible" title="登录" :width="isMobile ? '90%' : '30%'" :before-close="handleClose"
+      :append-to-body="true">
+      <el-form :model="form" v-loading="loading" ref="loginForm" element-loading-text="登录中..." :rules="formRules"
+        status-icon>
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="form.username" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="form.password" placeholder="请输入密码" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleLogin" :disabled="buttonDisabled">登录</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
-import { checkIdentity } from '@/api/identity'
+import { loginIn } from '@/api/identity'
 export default {
   name: 'LoginComponent',
   data () {
@@ -56,8 +50,8 @@ export default {
       loading: false,
       buttonDisabled: false,
       form: {
-        username: '秋风易冷',
-        password: 'wwww2003'
+        username: '游客账号',
+        password: 'helloworld123'
       },
       formRules: {
         username: [
@@ -125,14 +119,26 @@ export default {
       this.loading = true
       // 登入接口调用
       try {
-        const indentity = await checkIdentity(this.form.username, this.form.password)
-        // console.log('indentity', indentity)
+        const indentity = await loginIn(this.form.username, this.form.password)
+        console.log('indentity', indentity)
         if (indentity) {
-          this.$message.success('登录成功')
+          this.$message.success({
+            message: '登录成功',
+            duration: 1000
+          })
           this.$store.commit('login/setVisible', false)
-          this.$router.go(0)
+          // 登录成功后,跳转重定向页面
+          this.$nextTick(() => {
+            // 如果有重定向页面,则跳转重定向页面,否则跳转到首页
+            if (this.$route.query.redirect) {
+              this.$router.replace({ path: this.$route.query.redirect })
+            }
+          })
         } else {
-          this.$message.error('登录失败')
+          this.$message.error({
+            message: '登录失败,请检查用户名和密码是否正确',
+            duration: 1000
+          })
         }
       } catch (error) {
         this.$message.error(error.message)
@@ -149,6 +155,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

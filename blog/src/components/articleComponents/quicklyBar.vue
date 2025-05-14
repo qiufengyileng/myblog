@@ -4,8 +4,9 @@
     <ul class="quick-nav-list">
       <li class="quick-nav-item" @click="scrollToTop" style="cursor: pointer; ">返回顶部</li>
       <li v-for="(section, index) in sections" :key="index" class="quick-nav-item">
-        <a href="javascript:void(0)" @click="scrollToSection(`${index+1}`)" :class="{'choose-style': choose === `${index+1}`}"
-         style="cursor: pointer;
+        <a href="javascript:void(0)" @click="scrollToSection(`${index + 1}`)"
+        :title="section"
+          :class="{ 'choose-style': choose === `${index + 1}` }" style="cursor: pointer;
         text-decoration: none;
         color: inherit;
         ">{{ section }}</a>
@@ -81,6 +82,7 @@ export default {
 </script>
 
 <style scoped>
+
 .quick-nav {
   position: sticky;
   /*
@@ -94,14 +96,17 @@ export default {
   border-radius: 8px;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
-.choose-style{
-  color: #5fa0e2!important;
+
+.choose-style {
+  color: #5fa0e2 !important;
 }
+
 .quick-nav-title {
   font-size: 1.2rem;
   margin-bottom: 10px;
-  color:inherit;
+  color: inherit;
 }
 
 .quick-nav-list {
@@ -115,9 +120,17 @@ export default {
 }
 
 .quick-nav-item a {
+  display: inline-block;
+  width: 14vw;
   color: #0066cc;
   text-decoration: none;
   font-size: 0.9rem;
+  white-space: nowrap;
+  /* 强制不换行 */
+  overflow: hidden;
+  /* 超出部分隐藏 */
+  text-overflow: ellipsis;
+  /* 超出部分显示省略号 */
 }
 
 .quick-nav-item a:hover {

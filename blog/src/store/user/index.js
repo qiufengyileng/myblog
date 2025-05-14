@@ -9,7 +9,7 @@ export default {
   namespaced: true,
   state: {
     username: getName() || null,
-    token: getToken(),
+    token: getToken() || null,
     userData: getUserData() || null,
     history: getHistory() || [],
     message: null
@@ -21,6 +21,15 @@ export default {
        方法应该接收一个对象作为第二个参数，而不是单独的 username 和 password。 */
       state.username = payload.username
       state.token = payload.token
+    },
+    setUsername (state, username) {
+      state.username = username
+    },
+    setToken (state, token) {
+      state.token = token
+    },
+    clearToken (state) {
+      state.token = null
     },
     setPersonalCenterData (state, paload) {
       // console.log('setPersonalCenterData', paload)
@@ -60,9 +69,10 @@ export default {
       delHistory()
       // console.log('clearUserData', '退出登录成功')
       // 消息
-      Message.success('退出登录成功')
-      // 刷新页面
-      location.reload()
+      Message.success({
+        message: '退出登录成功',
+        duration: 1500
+      })
     },
     setUserAvatar (state, avatar) {
       state.userData.avatar = avatar

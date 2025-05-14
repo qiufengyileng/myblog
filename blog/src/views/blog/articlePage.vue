@@ -268,7 +268,6 @@ export default {
   --height1: 10vh;
   list-style: none;
 }
-
 .navbar {
   width: 100%;
   background-color: #333;
@@ -327,6 +326,7 @@ main {
   display: flex;
   justify-content: space-between;
   margin-top: calc(var(--height1) + 4vh);
+ min-height: calc(100vh - var(--height1) - 4vh - 135px);
   /*calc(var(--height1) + 4vh)要加空格  */
 }
 
@@ -426,9 +426,12 @@ input:checked + .slider:before {
   display: none;
 }
 .footer {
+
   /* background-color: #f8f8f8; */
+
   background-color: #f1f1f180;
   padding: 1.8rem 0;
+  margin-top: 20px;
 }
 
 .footer-text {
@@ -439,6 +442,7 @@ input:checked + .slider:before {
 }
 .dark-mode-footer {
   background-color: #2a2a2a;
+  margin-top: 20px;
 }
 .el-icon-arrow-left {
   display: none;

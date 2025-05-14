@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/store'
-import { Message } from 'element-ui'
+import Message from '@/main'
+import { delToken } from '@/utils/storage'
 const instance = axios.create({
   baseURL: 'http://124.220.12.190:3000/',
   // baseURL: 'http://127.0.0.1:3000/',
@@ -9,7 +10,6 @@ const instance = axios.create({
 instance.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
   const token = store.state.user.token
-  // console.log('interceptor=>', token)
   config.headers.Authorization = token
   return config
 }, function (error) {
@@ -25,7 +25,12 @@ instance.interceptors.response.use(function (response) {
 }, function (error) {
   // 超出 2xx 范围的状态码都会触发该函数。
   // 对响应错误做点什么
-  Message.error(error.message)
+  // 登录失效
+  if (error.response.status === 401) {
+    store.commit('user/clearToken')
+    delToken()
+  } 
+  Message.error(error.response.data.message)
   return Promise.reject(error)
 })
 export default instance

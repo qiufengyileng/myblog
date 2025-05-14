@@ -1,28 +1,32 @@
 import express from 'express';
-import { handleDataFromDB } from '../../connectMsql.js'
+import {handleDataFromDB2 } from '../../connectMsql.js'
 const router = express.Router()
 const timeLimit = 60*60*24// 一天的秒数
-let maxArticleNums = 1000
+let maxArticleNums = 3
 
 setInterval(() => {
-maxArticleNums = 1000  
+maxArticleNums = 3  
 }, timeLimit * 1000)
 
 // POST /write/add - 添加文章
+// ... existing code ...
 router.post('/saveArticle', async (req, res) => {
+  if(req.tokenData.username==='游客账号'){
+   return res.send({ message: 'ok',but:'游客模式下,文章上传成功,但是并不会被保存' })
+  }
   //不允许超过三篇文章
   if (maxArticleNums <= 0) {
     return res.send({ message: '超过最大文章数，添加文章失败' })
   }
   maxArticleNums--
-  const { title, content, publishedDate, tags, author,paragraphs } = req.body
-   console.log(req.body)
+  const { title, content, publishedDate, tags, author, paragraphs } = req.body
+  console.log(req.body)
   let id = NaN
 
   try {
     // 1. 获取 id
     const sql = 'SELECT id FROM articlelist ORDER BY id DESC LIMIT 1'
-    const data = await handleDataFromDB(sql, 'select')
+    const data = await handleDataFromDB2(sql, 'select')
     id = JSON.parse(data)[0]?.id + 1 || 1
 
     if (!id || isNaN(id)) {
@@ -31,13 +35,13 @@ router.post('/saveArticle', async (req, res) => {
 
     // 2. 添加文章列表信息
     const sql2 = `INSERT INTO articleList(id,title,author,publishedDate,content,tags) 
-                  VALUES(${id},'${title}','${author}','${publishedDate}','${content}','${tags}')`
-    await handleDataFromDB(sql2, 'insert')
+                  VALUES(?,?,?,?,?,?)`
+    await handleDataFromDB2(sql2, 'insert', [id, title, author, publishedDate, content, tags])
 
     // 3. 添加文章内容
     const sql3 = `INSERT INTO article(article_id,title,paragraphs) 
-                  VALUES(${id},'${title}','${paragraphs}')`
-    await handleDataFromDB(sql3, 'insert')
+                  VALUES(?,?,?)`
+    await handleDataFromDB2(sql3, 'insert', [id, title, paragraphs])
 
     res.send({ message: 'ok' })
 
@@ -46,4 +50,5 @@ router.post('/saveArticle', async (req, res) => {
     res.status(500).send({ message: '服务器故障，添加文章失败' })
   }
 })
+// ... existing code ...
 export default router
